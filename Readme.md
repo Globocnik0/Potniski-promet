@@ -1,1 +1,1 @@
-## Projekt za predmet databaze
+## Projekt za predmet osnove podatkovnih baz
