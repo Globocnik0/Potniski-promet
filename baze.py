@@ -62,18 +62,28 @@ def ustvariTabeloPotnik():
     CREATE TABLE potnik(
         emso TEXT PRIMARY KEY,
         ime TEXT NOT NULL,
-        vozovnica TEXT REFERENCES vozovnica(ime),
+        rojstvo DATE NOT NULL,
+        naslov TEXT NOT NULL,
+        vozovnica INTEGER REFERENCES vozovnica(id),
         datum_veljavnosti DATE NOT NULL
         )
     """
     return komanda
 
+def ustvariTabeloVozovnica():
+    komanda = """
+    CREATE TABLE vozovnica(
+        id INTEGER PRIMARY KEY, 
+        ime TEXT NOT NULL,
+        cena FLOAT NOT NULL,
+        opis TEXT)
+    """
+    return komanda
 def ustvariTabeloPostaja():
     komanda = """
     CREATE TABLE postaja(
-        id INTEGER PRIMARY KEY, 
-        datum DATE NOT NULL,
-        ura TIME NOT NULL
+        id SERIAL PRIMARY KEY, 
+        ime TEXT NOT NULL
         )
     """
     return komanda
@@ -106,18 +116,28 @@ def ustvariTabeloVozniRed():
         postaja INTEGER REFERENCES postaja(id),
         cas_prihoda TIME NOT NULL,
         cas_odhoda TIME NOT NULL,
-        zamuda TIME,
+        zamuda INTEGER,
         voznik TEXT REFERENCES zaposlen(emso),
         vlak INTEGER REFERENCES vlak(id),
         proga INTEGER REFERENCES proga(id),
-        PRIMARY KEY(vlak, cas_prihoda, postaja)
+        PRIMARY KEY(vlak, cas_prihoda, proga)
         )
     """
     return komanda
 
+def ustvariTabeloProgeKraji():
+    komanda = """ CREATE TABLE progeKraji(
+                proga INTEGER,
+                postaja INTEGER,
+                zaporedna_st INTEGER,
+                PRIMARY KEY(proga, postaja)
+                )
+    """
+    return komanda
 
 def zbrisiTabelo(ImeTabele):
     komanda = """
         DROP TABLE {}
     """.format(ImeTabele)
+    komanda += " CASCADE"
     return komanda
