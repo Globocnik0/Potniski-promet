@@ -17,10 +17,10 @@ def pozeni(komanda):
     cur.execute(komanda)
     conn.commit()
 
-#ustvarjanje baze -----------------------
+#USTVARJANJE TABEL -----------------------
 
-#komanda = zbrisiTabelo("vlak")
-
+komanda = zbrisiTabelo("progekraji")
+pozeni(komanda)
 komanda = ustvariTabeloModel()
 #pozeni(komanda)
 komanda = ustvariTabeloVlak()
@@ -41,11 +41,54 @@ komanda = ustvariTabeloProga()
 #pozeni(komanda)
 komanda = ustvariTabeloVozniRed()
 #pozeni(komanda)
+komanda = ustvariTabeloProgeKraji()
+#pozeni(komanda)
+
 
 #----POLNJENJE TABEL----------------
-komanda = izbrisiCeloTabelo("model")
-pozeni(komanda)
-komanda = napolniTabeloModel(vnosModel)
-pozeni(komanda)
+
+komanda = izbrisiCeloTabelo("voznired")
+#pozeni(komanda)
+
+komanda = napolniTabeloModel()
+#pozeni(komanda)
+print("tabela Model napolnjena")
+
 komanda = napolniTabeloVlak(conn, cur, 30)
-pozeni(komanda)
+#pozeni(komanda)
+print("tabela Vlak napolnjena")
+
+komanda = napolniTabeloPostaja()
+#pozeni(komanda)
+print("tabela Postaja napolnjena")
+
+komanda = napolniTabeloZaposleni(20)
+#pozeni(komanda)
+print("tabela Zaposleni napolnjena")
+
+komanda = napolniTabeloPregled(cur, 40)
+#pozeni(komanda)
+print("tabela Pregled napolnjena")
+
+komanda = napolniTabeloVozovnica()
+#pozeni(komanda)
+print("tabela Vozovnica napolnjena")
+
+komanda = napolniTabeloPotnik(cur, 20)
+#pozeni(komanda)
+print("tabela Potnik napolnjena")
+
+komanda = napolniTabeloProga(cur)
+#pozeni(komanda)
+print("tabela Proga napolnjena")
+
+komanda = napolniTabeloProgeKraji(cur)
+#pozeni(komanda)
+print("tabela ProgeKraji napolnjena")
+
+komanda = napolniTabeloVozniRed(cur)
+#pozeni(komanda)
+print("tabela VozniRed napolnjena")
+
+
+
