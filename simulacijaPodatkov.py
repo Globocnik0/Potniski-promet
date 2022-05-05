@@ -7,8 +7,6 @@ import psycopg2, psycopg2.extensions, psycopg2.extras
 import podatkiZaGeneracijo as pzg
 from faker import Faker
 import cas
-conn = psycopg2.connect(dbname = auth.db, host = auth.host, user = auth.user, password = auth.password)
-cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
 fake = Faker()
 def transponiraj(a1, a2):
@@ -25,7 +23,7 @@ def transponiraj2(a):
 
 
 
-def napolniTabeloModel():
+def napolniTabeloModel(cur):
     capList = [50, 100, 150, 200, 300]
     tezaList = [10, 12, 20, 20, 23]
     vnosModel = transponiraj(capList, tezaList)
@@ -33,10 +31,11 @@ def napolniTabeloModel():
     for val in vnosModel:
         niz = "({}, {}),".format(val[0], val[1])
         komanda += niz
-    return komanda[:-1] #znebimo se zadnje vejice
+    cur.execute(komanda[:-1])
+    
 
 #----VLAK----------------
-def napolniTabeloVlak(con, cur, stVnosov):
+def napolniTabeloVlak(cur, stVnosov):
     cur.execute(""" SELECT id from model""")
     modeliNaVoljo = cur.fetchall()
     letaIzdelava = [random.randint(1980, 2020) for m in range(stVnosov)]
@@ -47,18 +46,20 @@ def napolniTabeloVlak(con, cur, stVnosov):
     for val in vnosVlak:
         niz = "({}, {}),".format(val[0], val[1])
         komanda += niz
-    return komanda[:-1]
+    cur.execute(komanda[:-1])
+    
 
 #-----POSTAJA------------------------------------------------
-def napolniTabeloPostaja():
+def napolniTabeloPostaja( cur):
     komanda = """INSERT INTO postaja(ime) values"""
     for val in pzg.imenaPostaj:
         niz = "({}),".format(val)
         komanda += niz
-    return komanda[:-1] #znebimo se zadnje vejice    
+    cur.execute(komanda[:-1])
+     #znebimo se zadnje vejice    
 
 #---------------ZAPOSLENI------------------------------------------------
-def napolniTabeloZaposleni(stVnosov):
+def napolniTabeloZaposleni( cur,stVnosov):
     komanda = """INSERT INTO zaposlen(emso, ime, rojstvo, naslov, datum_zaposlitve, naziv) values"""
     emsos = [random.randint(1000000, 9999999) for m in range(stVnosov)]
     imens = [pzg.imena[random.randint(0, len(pzg.imena)-1)] for m in range(stVnosov)]
@@ -81,7 +82,8 @@ def napolniTabeloZaposleni(stVnosov):
         dz = datum(val[6])
         niz = "('{}', {}, {}, {}, {}, {}),".format(em, im, d, nas, dz, val[7])
         komanda += niz
-    return komanda[:-1]       
+    cur.execute(komanda[:-1])
+           
 
 #-----------PREGLED------------------
 def napolniTabeloPregled(cur, stVnosov):
@@ -109,34 +111,36 @@ def napolniTabeloPregled(cur, stVnosov):
         kom = val[3]
         niz = "({}, {}, {}, {}),".format(vl, zap, dat, kom)
         komanda += niz
-    return komanda[:-1]       
+    cur.execute(komanda[:-1])
+           
 
 #-----------VOZOVNICA-----------------  
-def napolniTabeloVozovnica():
-    komanda = """INSERT INTO vozovnica(id, ime, cena, opis) values"""
+def napolniTabeloVozovnica(cur):
+    komanda = """INSERT INTO vozovnica(id, ime, cena, velja, opis) values"""
     
-    list = np.array([pzg.vozovnicaId ,pzg.vozovnicaIme, pzg.vozovnicaCena, pzg.vozovnicaOpis])
+    list = np.array([pzg.vozovnicaId ,pzg.vozovnicaIme, pzg.vozovnicaCena, pzg.vozovnicaVelja, pzg.vozovnicaOpis])
     vnosVozovnice= transponiraj2(list)
 
     for val in vnosVozovnice:
         id = val[0]
         im = val[1]
         cen = val[2]
-        op = val[3]
-        niz = "({}, {}, {}, {}),".format(id, im, cen, op)
+        vel = val[3]
+        op = val[4]
+        niz = "({}, {}, {}, {}, {}),".format(id, im, cen, vel, op)
         komanda += niz
-    return komanda[:-1]
+    cur.execute(komanda[:-1])
+    
 
 #---------POTNIKI------------------
 def napolniTabeloPotnik(cur, stVnosov):
-    komanda = """INSERT INTO potnik(emso, ime, rojstvo, naslov, vozovnica, datum_veljavnosti) values"""
+    komanda = """INSERT INTO potnik(emso, ime, rojstvo, naslov, mail, geslo, vozovnica, datum_veljavnosti) values"""
     cur.execute(""" SELECT id from vozovnica""")
     vozIds = cur.fetchall()
     
     emsos = [random.randint(1000000, 9999999) for m in range(stVnosov)]
     emsos = list(set(emsos))
     stVnosov = len(emsos)
-    print(vozIds)
     imens = [pzg.imena[random.randint(0, len(pzg.imena)-1)] for m in range(stVnosov)]
     primks = [pzg.priimki[random.randint(0, len(pzg.priimki)-1)] for m in range(stVnosov)]
     rojstvs = [(random.randint(1, 28), random.randint(1, 12), random.randint(1960, 2000)) for m in range(stVnosov)]
@@ -147,18 +151,22 @@ def napolniTabeloPotnik(cur, stVnosov):
     llist = np.array([emsos, imens, primks, rojstvs, naslovs, stevilks, vozovnicas, datumis])
     vnosPotniki = transponiraj2(llist)
     
-    for val in vnosPotniki:
+    for i, val in enumerate(vnosPotniki):
         em = val[0]
-        im = val[1] + " " + val[2]
-        im = im.replace("' '", " ")
+        ime = val[1].replace("'", "")
+        priimk = val[2].replace("'", "")
+        imPr = "'" + ime + " " + priimk + "'"
         d = datum(val[3])
         nas = val[4] + " " + str(val[5])
         nas = nas.replace("' ", " ") + "'"
+        ma = "'" + ime + "." + priimk + str(i) + "@gmail.com" + "'"
+        ges = "'123'"
         voz = val[6]
         dat = datum(val[7])
-        niz = "('{}', {}, {}, {}, {}, {}),".format(em, im, d, nas, voz, dat)
+        niz = "('{}', {}, {}, {}, {}, {}, {}, {}),".format(em, imPr, d, nas, ma, ges, voz, dat)
         komanda += niz
-    return komanda[:-1]
+    cur.execute(komanda[:-1])
+    
 
 #------PROGA------------------
 def napolniTabeloProga(cur):
@@ -187,7 +195,8 @@ def napolniTabeloProga(cur):
         sezP = val[1]
         niz = "({}, '{}'),".format(id, sezP)
         komanda += niz
-    return komanda[:-1]
+    cur.execute(komanda[:-1])
+    
 
 #----PROGA2------------------
 def napolniTabeloProgeKraji(cur):
@@ -206,7 +215,8 @@ def napolniTabeloProgeKraji(cur):
             posId = posIds[0][0]
             niz = "({}, {}, {}),".format(prId, posId, j)
             komanda += niz
-    return komanda[:-1]
+    cur.execute(komanda[:-1])
+    
 
 
 
@@ -283,14 +293,15 @@ def napolniTabeloVozniRed(cur):
         pr = val[6]
         niz = "({}, '{}', '{}', {}, '{}', {}, {}),".format(idp, cp, co, zam, vo, vl, pr)
         komanda += niz
-    return komanda[:-1]
+    cur.execute(komanda[:-1])
+    
 
     
-def izbrisiCeloTabelo(tabela):
+def izbrisiCeloTabelo(cur, tabela):
     komanda = """ DELETE FROM {}
     """.format(tabela)
 
-    return komanda
+    cur.execute(komanda)
 
 def datum(d):
     return "'{}-{}-{}'".format(d[2], d[1], d[0])

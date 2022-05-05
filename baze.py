@@ -1,4 +1,16 @@
+import auth
+from baze import *
+from simulacijaPodatkov import *
+import psycopg2, psycopg2.extensions, psycopg2.extras
 
+psycopg2.extensions.register_type(psycopg2.extensions.UNICODE)
+
+import csv
+
+
+
+conn = psycopg2.connect(dbname = auth.db, host = auth.host, user = auth.user, password = auth.password)
+cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
 def ustvariTabeloModel():
     komanda = """
@@ -8,7 +20,8 @@ def ustvariTabeloModel():
             teza FLOAT
         )
     """
-    return komanda
+    cur.execute(komanda)
+    conn.commit()
 
 def ustvariTabeloVlak():
     komanda = """
@@ -18,7 +31,8 @@ def ustvariTabeloVlak():
             model INTEGER REFERENCES model(id)
         )
     """
-    return komanda
+    cur.execute(komanda)
+    conn.commit()
 
 def ustvariTabeloZaposlen():
     komanda = """
@@ -31,7 +45,8 @@ def ustvariTabeloZaposlen():
             naziv TEXT NOT NULL
         )
     """
-    return komanda
+    cur.execute(komanda)
+    conn.commit()
 
 def ustvariTabeloPregled():
     komanda = """
@@ -43,7 +58,8 @@ def ustvariTabeloPregled():
             vlak INTEGER NOT NULL REFERENCES vlak(id)
         )
     """
-    return komanda
+    cur.execute(komanda)
+    conn.commit()
 
 def ustvariTabeloVozovnica():
     komanda = """
@@ -54,7 +70,8 @@ def ustvariTabeloVozovnica():
         opis TEXT
         )
     """
-    return komanda
+    cur.execute(komanda)
+    conn.commit()
 
 
 def ustvariTabeloPotnik():
@@ -64,11 +81,15 @@ def ustvariTabeloPotnik():
         ime TEXT NOT NULL,
         rojstvo DATE NOT NULL,
         naslov TEXT NOT NULL,
+        mail TEXT NOT NULL UNIQUE,
+        geslo TEXT NOT NULL,
         vozovnica INTEGER REFERENCES vozovnica(id),
-        datum_veljavnosti DATE NOT NULL
+        datum_veljavnosti DATE 
+
         )
     """
-    return komanda
+    cur.execute(komanda)
+    conn.commit()
 
 def ustvariTabeloVozovnica():
     komanda = """
@@ -76,9 +97,11 @@ def ustvariTabeloVozovnica():
         id INTEGER PRIMARY KEY, 
         ime TEXT NOT NULL,
         cena FLOAT NOT NULL,
+        velja INT NOT NULL,
         opis TEXT)
     """
-    return komanda
+    cur.execute(komanda)
+    conn.commit()
 def ustvariTabeloPostaja():
     komanda = """
     CREATE TABLE postaja(
@@ -86,7 +109,8 @@ def ustvariTabeloPostaja():
         ime TEXT NOT NULL
         )
     """
-    return komanda
+    cur.execute(komanda)
+    conn.commit()
 
 def ustvariTabeloVoznja():
     komanda = """
@@ -99,7 +123,8 @@ def ustvariTabeloVoznja():
         PRIMARY KEY (potnik, datum, ura)
         )
     """
-    return komanda
+    cur.execute(komanda)
+    conn.commit()
 
 def ustvariTabeloProga():
     komanda = """
@@ -108,7 +133,8 @@ def ustvariTabeloProga():
         seznam_postaj TEXT NOT NULL
         )
     """
-    return komanda
+    cur.execute(komanda)
+    conn.commit()
 
 def ustvariTabeloVozniRed():
     komanda = """
@@ -123,7 +149,8 @@ def ustvariTabeloVozniRed():
         PRIMARY KEY(vlak, cas_prihoda, proga)
         )
     """
-    return komanda
+    cur.execute(komanda)
+    conn.commit()
 
 def ustvariTabeloProgeKraji():
     komanda = """ CREATE TABLE progeKraji(
@@ -133,11 +160,16 @@ def ustvariTabeloProgeKraji():
                 PRIMARY KEY(proga, postaja)
                 )
     """
-    return komanda
+    cur.execute(komanda)
+    conn.commit()
 
-def zbrisiTabelo(ImeTabele):
+def zbrisiTabelo(cur, ImeTabele):
     komanda = """
         DROP TABLE {}
     """.format(ImeTabele)
     komanda += " CASCADE"
-    return komanda
+    cur.execute(komanda)
+
+def izbrisiVse(cur, tabele):
+    for tabela in tabele:
+        zbrisiTabelo(cur, tabela)

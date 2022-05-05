@@ -399,6 +399,7 @@ vozovnicaId = [1,2,3]
 vozovnicaIme = ["'Letna'", "'Upokojenska'", "'Mesečna'"]
 vozovnicaCena = [120, 20, 30]
 vozovnicaOpis = ["'Za_bogate'", "'Za_stare'", "'Za_revne'"]
+vozovnicaVelja = [365, 1000000, 30]
 
 
 def randomInt():
