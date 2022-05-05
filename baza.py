@@ -8,87 +8,78 @@ psycopg2.extensions.register_type(psycopg2.extensions.UNICODE)
 import csv
 
 
-
+print("nekej1")
 conn = psycopg2.connect(dbname = auth.db, host = auth.host, user = auth.user, password = auth.password)
 cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 tabele = []
-
+print("nekej2")
 def pozeni(komanda):
     cur.execute(komanda)
     conn.commit()
 
+
+tabele = ["model", "vlak", "zaposlen", "pregled", "vozovnica", "potnik", "postaja", "voznja", "proga", "voznired", "progekraji"]
+
+#izbrisiVse(cur, tabele)
 #USTVARJANJE TABEL -----------------------
 
-komanda = zbrisiTabelo("progekraji")
-pozeni(komanda)
-komanda = ustvariTabeloModel()
-#pozeni(komanda)
-komanda = ustvariTabeloVlak()
-#pozeni(komanda)
-komanda = ustvariTabeloZaposlen()
-#pozeni(komanda)
-komanda = ustvariTabeloPregled()
-#pozeni(komanda)
-komanda = ustvariTabeloVozovnica()
-#pozeni(komanda)
-komanda = ustvariTabeloPotnik()
-#pozeni(komanda)
-komanda = ustvariTabeloPostaja()
-#pozeni(komanda)
-komanda = ustvariTabeloVoznja()
-#pozeni(komanda)
-komanda = ustvariTabeloProga()
-#pozeni(komanda)
-komanda = ustvariTabeloVozniRed()
-#pozeni(komanda)
-komanda = ustvariTabeloProgeKraji()
-#pozeni(komanda)
+# zbrisiTabelo(cur, "model")
+# zbrisiTabelo(cur, "vlak")
+# zbrisiTabelo(cur, "zaposlen")
+# zbrisiTabelo(cur, "pregled")
+# zbrisiTabelo(cur, "vozovnica")
+# zbrisiTabelo(cur, "potnik")
+# zbrisiTabelo(cur, "postaja")
+# zbrisiTabelo(cur, "voznja")
+# zbrisiTabelo(cur, "proga")
+# zbrisiTabelo(cur, "voznired")
+# zbrisiTabelo(cur, "progekraji")
+conn.commit()
 
+# ustvariTabeloModel()
+# ustvariTabeloVlak()
+# ustvariTabeloZaposlen()
+# ustvariTabeloPregled()
+# ustvariTabeloVozovnica()
+# ustvariTabeloPotnik()
+# ustvariTabeloPostaja()
+# ustvariTabeloVoznja()
+# ustvariTabeloProga()
+# ustvariTabeloVozniRed()
+# ustvariTabeloProgeKraji()
+conn.commit()
 
 #----POLNJENJE TABEL----------------
+#izbrisiCeloTabelo(cur, "potnik")
 
-komanda = izbrisiCeloTabelo("voznired")
-#pozeni(komanda)
+# napolniTabeloModel(cur)
+# print("tabela Model napolnjena")
 
-komanda = napolniTabeloModel()
-#pozeni(komanda)
-print("tabela Model napolnjena")
+# napolniTabeloVlak(cur, 30)
+# print("tabela Vlak napolnjena")
 
-komanda = napolniTabeloVlak(conn, cur, 30)
-#pozeni(komanda)
-print("tabela Vlak napolnjena")
+# napolniTabeloPostaja(cur)
+# print("tabela Postaja napolnjena")
 
-komanda = napolniTabeloPostaja()
-#pozeni(komanda)
-print("tabela Postaja napolnjena")
+# napolniTabeloZaposleni(cur, 20)
+# print("tabela Zaposleni napolnjena")
 
-komanda = napolniTabeloZaposleni(20)
-#pozeni(komanda)
-print("tabela Zaposleni napolnjena")
+# napolniTabeloPregled(cur, 40)
+# print("tabela Pregled napolnjena")
 
-komanda = napolniTabeloPregled(cur, 40)
-#pozeni(komanda)
-print("tabela Pregled napolnjena")
+# napolniTabeloVozovnica(cur)
+# print("tabela Vozovnica napolnjena")
 
-komanda = napolniTabeloVozovnica()
-#pozeni(komanda)
-print("tabela Vozovnica napolnjena")
+# napolniTabeloPotnik(cur, 20000)
+# print("tabela Potnik napolnjena")
 
-komanda = napolniTabeloPotnik(cur, 20)
-#pozeni(komanda)
-print("tabela Potnik napolnjena")
+# napolniTabeloProga(cur)
+# print("tabela Proga napolnjena")
 
-komanda = napolniTabeloProga(cur)
-#pozeni(komanda)
-print("tabela Proga napolnjena")
+# napolniTabeloProgeKraji(cur)
+# print("tabela ProgeKraji napolnjena")
 
-komanda = napolniTabeloProgeKraji(cur)
-#pozeni(komanda)
-print("tabela ProgeKraji napolnjena")
+# napolniTabeloVozniRed(cur)
+# print("tabela VozniRed napolnjena")
 
-komanda = napolniTabeloVozniRed(cur)
-#pozeni(komanda)
-print("tabela VozniRed napolnjena")
-
-
-
+conn.commit()
