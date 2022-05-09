@@ -145,8 +145,8 @@ def ustvariTabeloVozniRed():
         voznik TEXT REFERENCES zaposlen(emso),
         vlak INTEGER REFERENCES vlak(id),
         proga INTEGER REFERENCES proga(id),
-        voznja INTEGER NOT NULL
-        PRIMARY KEY(proga, voznja)
+        voznja INTEGER NOT NULL,
+        PRIMARY KEY(proga, voznja, postaja)
         )
     """
     cur.execute(komanda)
