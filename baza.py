@@ -7,12 +7,10 @@ psycopg2.extensions.register_type(psycopg2.extensions.UNICODE)
 
 import csv
 
-
-print("nekej1")
 conn = psycopg2.connect(dbname = auth.db, host = auth.host, user = auth.user, password = auth.password)
 cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 tabele = []
-print("nekej2")
+
 def pozeni(komanda):
     cur.execute(komanda)
     conn.commit()
