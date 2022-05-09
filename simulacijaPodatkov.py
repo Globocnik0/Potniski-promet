@@ -235,10 +235,10 @@ def napolniTabeloVozniRed(cur):
     postajes = []
     casis1 = []
     casis2 = []
-    zamudas = []
     vozniks = []
     vlaks = []
     progas = []
+    voznjas = []
 
     vv = 0
     voz = vozEmss[0][0]
@@ -252,6 +252,7 @@ def napolniTabeloVozniRed(cur):
         #print("casi med postajami", casiMedPostajami)
         t = 0
         j = 0
+        vz = 0
         while(t<60*20 or j%len(postaje) != 0):
             p = postaje[j%len(postaje)]
             if p == postaje[0]:
@@ -259,6 +260,8 @@ def napolniTabeloVozniRed(cur):
                 vla = vlakIds[vv%len(vlakIds)][0]
                 vv += 1
                 t += 30
+                vz += 1
+                
             
             postajes.append(int(p))
             t = t + casiMedPostajami[j%len(postaje)]
@@ -268,8 +271,7 @@ def napolniTabeloVozniRed(cur):
             t += pavzaMin
             uraOdhod = cas.Cas.minVCas(t)
             casis2.append(uraOdhod)
-            zamudas.append(0)
-            
+            voznjas.append(vz)           
             vozniks.append(voz)
             vlaks.append(vla)
             progas.append(id)
@@ -279,19 +281,19 @@ def napolniTabeloVozniRed(cur):
         
 
 
-    llist = np.array([postajes, casis1, casis2, zamudas, vozniks, vlaks, progas])
+    llist = np.array([postajes, casis1, casis2, vozniks, vlaks, progas, voznjas])
     vnosVozniRed = transponiraj2(llist)
     
-    komanda = """INSERT INTO voznired(postaja, cas_prihoda, cas_odhoda, zamuda, voznik, vlak, proga) values"""
+    komanda = """INSERT INTO voznired(postaja, cas_prihoda, cas_odhoda, voznik, vlak, proga, voznja) values"""
     for val in vnosVozniRed:
         idp = val[0]
         cp = val[1]
         co = val[2]
-        zam = val[3]
-        vo = val[4]
-        vl = val[5]
-        pr = val[6]
-        niz = "({}, '{}', '{}', {}, '{}', {}, {}),".format(idp, cp, co, zam, vo, vl, pr)
+        vo = val[3]
+        vl = val[4]
+        pr = val[5]
+        vz = val[6]
+        niz = "({}, '{}', '{}', {}, '{}', {}, {}),".format(idp, cp, co, vo, vl, pr, vz)
         komanda += niz
     cur.execute(komanda[:-1])
     
