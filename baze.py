@@ -142,10 +142,10 @@ def ustvariTabeloVozniRed():
         postaja INTEGER REFERENCES postaja(id),
         cas_prihoda TIME NOT NULL,
         cas_odhoda TIME NOT NULL,
-        zamuda INTEGER,
         voznik TEXT REFERENCES zaposlen(emso),
         vlak INTEGER REFERENCES vlak(id),
         proga INTEGER REFERENCES proga(id),
+        voznja 
         PRIMARY KEY(vlak, cas_prihoda, proga)
         )
     """
