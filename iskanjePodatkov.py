@@ -84,7 +84,7 @@ def poisciVmesnePostaje(p1, p2):
     cur.execute("""SELECT id FROM postaja WHERE ime = '{}'""".format(p2))
     p22 = cur.fetchall()[0][0]
     
-    komanda = """ SELECT vr.postaja, cas_odhoda, vr.proga FROM voznired vr
+    komanda = """ SELECT vr.postaja, po.ime, cas_odhoda, vr.proga, vr.voznja FROM voznired vr
                 JOIN
                     (SELECT pr2.proga 
                     FROM progekraji pr2
@@ -100,16 +100,220 @@ def poisciVmesnePostaje(p1, p2):
                 ON pr.proga = vr.proga
                 --WHERE vr.postaja = {} OR vr.postaja = {}
 
-            JOIN progekraji p ON p.proga = vr.proga AND p.postaja= vr.postaja
-            WHERE p.zaporedna_st >= (SELECT zaporedna_st FROM progekraji pk WHERE pk.proga = vr.proga AND pk.postaja = {}) 
-            AND p.zaporedna_st <= (SELECT zaporedna_st FROM progekraji pk WHERE pk.proga = vr.proga AND pk.postaja = {})""".format(p11, p22, p11, p22, p11, p22)
+            JOIN progekraji pk1 ON pk1.proga = vr.proga AND pk1.postaja= vr.postaja
+            JOIN postaja po ON vr.postaja = po.id
+            WHERE pk1.zaporedna_st >= (SELECT zaporedna_st FROM progekraji pk WHERE pk.proga = vr.proga AND pk.postaja = {}) 
+            AND pk1.zaporedna_st <= (SELECT zaporedna_st FROM progekraji pk WHERE pk.proga = vr.proga AND pk.postaja = {})
+            ORDER BY vr.voznja, vr.proga, vr.cas_odhoda  ASC""".format(p11, p22, p11, p22, p11, p22)
 
     cur.execute(komanda)
     tabela = cur.fetchall()
 
     return tabela
 
-def registracijaUporabnika(podatki): #podatki so emso, ime, rojstvo, naslov, mail, geslo
+def razlicneProgeNaRelaciji(p1, p2): #poisce indexe prog ki povezujejo relaciji
+    cur.execute("""SELECT id FROM postaja WHERE ime = '{}'""".format(p1))
+    p11 = cur.fetchall()[0][0]
+    cur.execute("""SELECT id FROM postaja WHERE ime = '{}'""".format(p2))
+    p22 = cur.fetchall()[0][0]
+    
+    komanda = """ SELECT vr.proga FROM voznired vr
+                JOIN
+                    (SELECT pr2.proga 
+                    FROM progekraji pr2
+                    JOIN
+                        (SELECT proga, zaporedna_st from progekraji 
+                        WHERE postaja = {}
+                        GROUP BY proga, zaporedna_st) pr1
+
+                    ON pr2.proga = pr1.proga
+                    WHERE pr2.postaja = {} AND pr2.zaporedna_st > pr1.zaporedna_st
+                    GROUP BY pr2.proga)  pr
+
+                ON pr.proga = vr.proga
+                JOIN postaja p 
+                ON p.id = vr.postaja
+                WHERE vr.postaja = {} OR vr.postaja = {}
+                GROUP BY vr.proga""".format(p11, p22, p11, p22)
+    
+    cur.execute(komanda)
+    tabela = cur.fetchall()
+    return tabela
+
+def poisciVozniRed3(p1, p2): #vsako voznjo med dvema krajema zapakira v svoj seznam.
+    cur.execute("""SELECT id FROM postaja WHERE ime = '{}'""".format(p1))
+    p11 = cur.fetchall()[0][0]
+    cur.execute("""SELECT id FROM postaja WHERE ime = '{}'""".format(p2))
+    p22 = cur.fetchall()[0][0]
+    
+    komanda = """SELECT vr.postaja, po.ime, vr.cas_odhoda FROM voznired vr
+                    JOIN
+                        (SELECT pr2.proga 
+                        FROM progekraji pr2
+                        JOIN
+                            (SELECT proga, zaporedna_st from progekraji 
+                            WHERE postaja = {}
+                            GROUP BY proga, zaporedna_st) pr1
+
+                        ON pr2.proga = pr1.proga
+                        WHERE pr2.postaja = {} AND pr2.zaporedna_st > pr1.zaporedna_st
+                        GROUP BY pr2.proga)  pr
+
+                    ON pr.proga = vr.proga
+
+                JOIN progekraji pk1 ON pk1.proga = vr.proga AND pk1.postaja= vr.postaja
+                JOIN postaja po ON vr.postaja = po.id
+
+                JOIN
+                (
+                SELECT vrr.postaja, vrr.cas_odhoda, vrr.proga, vrr.voznja FROM voznired vrr
+                                JOIN
+                                    (SELECT pr22.proga 
+                                    FROM progekraji pr22
+                                    JOIN
+                                        (SELECT proga, zaporedna_st from progekraji 
+                                        WHERE postaja = {}
+                                        GROUP BY proga, zaporedna_st) pr11
+
+                                    ON pr22.proga = pr11.proga
+                                    WHERE pr22.postaja = {} AND pr22.zaporedna_st > pr11.zaporedna_st
+                                    GROUP BY pr22.proga)  prr
+
+                                ON prr.proga = vrr.proga
+
+                JOIN progekraji pk11 ON pk11.proga = vrr.proga AND pk11.postaja= vrr.postaja
+                WHERE pk11.zaporedna_st >= (SELECT zaporedna_st FROM progekraji pkk WHERE pkk.proga = vrr.proga AND pkk.postaja = {}) 
+                AND pk11.zaporedna_st <= (SELECT zaporedna_st FROM progekraji pkk WHERE pkk.proga = vrr.proga AND pkk.postaja = {}) 
+                AND vrr.postaja = {}) vr11
+                    
+                ON vr11.proga = vr.proga AND vr11.voznja = vr.voznja
+                    WHERE pk1.zaporedna_st <= (SELECT zaporedna_st FROM progekraji pk WHERE pk.proga = vr.proga AND pk.postaja = {})
+                    AND pk1.zaporedna_st >= (SELECT zaporedna_st FROM progekraji pk WHERE pk.proga = vr.proga AND pk.postaja = {}) 
+                    ORDER BY vr11.cas_odhoda, zaporedna_st""".format(p11, p22, p11, p22, p11, p22, p11, p22, p11)   
+
+    cur.execute(komanda)
+    tabela = cur.fetchall()
+    return tabela
+
+def vrstniRedProgaVoznja(p1, p2):
+    cur.execute("""SELECT id FROM postaja WHERE ime = '{}'""".format(p1))
+    p11 = cur.fetchall()[0][0]
+    cur.execute("""SELECT id FROM postaja WHERE ime = '{}'""".format(p2))
+    p22 = cur.fetchall()[0][0]
+    
+    komanda = """SELECT vr.proga, vr.voznja FROM voznired vr
+                JOIN
+                    (SELECT pr2.proga 
+                    FROM progekraji pr2
+                    JOIN
+                        (SELECT proga, zaporedna_st from progekraji 
+                        WHERE postaja = {}
+                        GROUP BY proga, zaporedna_st) pr1
+
+                    ON pr2.proga = pr1.proga
+                    WHERE pr2.postaja = {} AND pr2.zaporedna_st > pr1.zaporedna_st
+                    GROUP BY pr2.proga)  pr
+
+                ON pr.proga = vr.proga
+
+                JOIN progekraji pk1 ON pk1.proga = vr.proga AND pk1.postaja= vr.postaja
+                JOIN postaja po ON vr.postaja = po.id
+
+                JOIN
+                (
+                SELECT vrr.postaja, vrr.cas_odhoda, vrr.proga, vrr.voznja FROM voznired vrr
+                                JOIN
+                                    (SELECT pr22.proga 
+                                    FROM progekraji pr22
+                                    JOIN
+                                        (SELECT proga, zaporedna_st from progekraji 
+                                        WHERE postaja = {}
+                                        GROUP BY proga, zaporedna_st) pr11
+
+                                    ON pr22.proga = pr11.proga
+                                    WHERE pr22.postaja = {} AND pr22.zaporedna_st > pr11.zaporedna_st
+                                    GROUP BY pr22.proga)  prr
+
+                                ON prr.proga = vrr.proga
+
+                            JOIN progekraji pk11 ON pk11.proga = vrr.proga AND pk11.postaja= vrr.postaja
+                            WHERE pk11.zaporedna_st >= (SELECT zaporedna_st FROM progekraji pkk WHERE pkk.proga = vrr.proga AND pkk.postaja = {}) 
+                            AND pk11.zaporedna_st <= (SELECT zaporedna_st FROM progekraji pkk WHERE pkk.proga = vrr.proga AND pkk.postaja = {}) 
+                            AND vrr.postaja = {}) vr11
+                    
+                ON vr11.proga = vr.proga AND vr11.voznja = vr.voznja
+                WHERE pk1.zaporedna_st <= (SELECT zaporedna_st FROM progekraji pk WHERE pk.proga = vr.proga AND pk.postaja = {})
+                    AND pk1.zaporedna_st >= (SELECT zaporedna_st FROM progekraji pk WHERE pk.proga = vr.proga AND pk.postaja = {}) 
+                    
+                GROUP BY vr.proga, vr.voznja, vr11.cas_odhoda
+                ORDER BY vr11.cas_odhoda""".format(p11, p22, p11, p22, p11, p22, p11, p22, p11)
+    
+    cur.execute(komanda)
+    tabela = cur.fetchall()
+    return tabela
+
+def vozniRedVGrupah(p1, p2):
+    cur.execute("""SELECT id FROM postaja WHERE ime = '{}'""".format(p1))
+    p11 = cur.fetchall()[0][0]
+    cur.execute("""SELECT id FROM postaja WHERE ime = '{}'""".format(p2))
+    p22 = cur.fetchall()[0][0]
+    
+    progaVoznja = vrstniRedProgaVoznja(p1, p2)
+    grupe = []
+    for i, j in progaVoznja:
+        komanda = """SELECT vr.postaja, po.ime, vr.cas_odhoda FROM voznired vr
+                        JOIN
+                            (SELECT pr2.proga 
+                            FROM progekraji pr2
+                            JOIN
+                                (SELECT proga, zaporedna_st from progekraji 
+                                WHERE postaja = {}
+                                GROUP BY proga, zaporedna_st) pr1
+
+                            ON pr2.proga = pr1.proga
+                            WHERE pr2.postaja = {} AND pr2.zaporedna_st > pr1.zaporedna_st
+                            GROUP BY pr2.proga)  pr
+
+                        ON pr.proga = vr.proga
+
+                    JOIN progekraji pk1 ON pk1.proga = vr.proga AND pk1.postaja= vr.postaja
+                    JOIN postaja po ON vr.postaja = po.id
+
+                    JOIN
+                    (
+                    SELECT vrr.postaja, vrr.cas_odhoda, vrr.proga, vrr.voznja FROM voznired vrr
+                                    JOIN
+                                        (SELECT pr22.proga 
+                                        FROM progekraji pr22
+                                        JOIN
+                                            (SELECT proga, zaporedna_st from progekraji 
+                                            WHERE postaja = {}
+                                            GROUP BY proga, zaporedna_st) pr11
+
+                                        ON pr22.proga = pr11.proga
+                                        WHERE pr22.postaja = {} AND pr22.zaporedna_st > pr11.zaporedna_st
+                                        GROUP BY pr22.proga)  prr
+
+                                    ON prr.proga = vrr.proga
+
+                    JOIN progekraji pk11 ON pk11.proga = vrr.proga AND pk11.postaja= vrr.postaja
+                    WHERE pk11.zaporedna_st >= (SELECT zaporedna_st FROM progekraji pkk WHERE pkk.proga = vrr.proga AND pkk.postaja = {}) 
+                    AND pk11.zaporedna_st <= (SELECT zaporedna_st FROM progekraji pkk WHERE pkk.proga = vrr.proga AND pkk.postaja = {}) 
+                    AND vrr.postaja = {}) vr11
+                        
+                    ON vr11.proga = vr.proga AND vr11.voznja = vr.voznja
+                        WHERE pk1.zaporedna_st <= (SELECT zaporedna_st FROM progekraji pk WHERE pk.proga = vr.proga AND pk.postaja = {})
+                        AND pk1.zaporedna_st >= (SELECT zaporedna_st FROM progekraji pk WHERE pk.proga = vr.proga AND pk.postaja = {}) 
+                        AND vr.proga = {} 
+                        AND vr.voznja = {}
+                        ORDER BY vr11.cas_odhoda, zaporedna_st""".format(p11, p22, p11, p22, p11, p22, p11, p22, p11, i, j)   
+
+        cur.execute(komanda)
+        tabela = cur.fetchall()
+        grupe.append(tabela)
+    return grupe
+
+def registracijaUporabnika(podatki): #podatki so [emso, ime, rojstvo, naslov, mail, geslo]
     cur.execute(""" SELECT mail from potnik where mail = '{}' """.format(podatki[4]))
     mailObstaja = cur.fetchall()
     if mailObstaja:
@@ -125,7 +329,7 @@ def registracijaUporabnika(podatki): #podatki so emso, ime, rojstvo, naslov, mai
     cur.execute("""INSERT INTO potnik(emso, ime, rojstvo, naslov, mail, geslo) values (%s, %s, %s, %s, %s, %s)""", podatki)
     conn.commit()
         
-def nakupKarte(podatki): #emso, vrsta Karte
+def nakupKarte(podatki): #[emso, vrsta Karte]
     
     emso = podatki[0]
     vrsta = podatki[1]
@@ -138,5 +342,6 @@ def nakupKarte(podatki): #emso, vrsta Karte
     conn.commit()
 
 # nakupKarte(["1835012", 1])
-tabela = poisciVozniRed2("Ljubljana", "Kranj")
-print(tabulate(tabela))
+for tab in vozniRedVGrupah("Ljubljana", "Kranj"):
+    print(tabulate(tab))
+
