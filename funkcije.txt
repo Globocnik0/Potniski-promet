@@ -1,0 +1,95 @@
+CREATE FUNCTION dobiVozniRed3(vstopna text, iztopna text) RETURNS TABLE(postaja int, ime text, cas TIME) AS '
+    SELECT vr.postaja, po.ime, vr.cas_odhoda FROM voznired vr
+                    JOIN
+                        (SELECT pr2.proga 
+                        FROM progekraji pr2
+                        JOIN
+                            (SELECT proga, zaporedna_st from progekraji 
+                            WHERE postaja = (SELECT id FROM postaja WHERE ime = vstopna)
+                            GROUP BY proga, zaporedna_st) pr1
+
+                        ON pr2.proga = pr1.proga
+                        WHERE pr2.postaja = (SELECT id FROM postaja WHERE ime = iztopna) AND pr2.zaporedna_st > pr1.zaporedna_st
+                        GROUP BY pr2.proga)  pr
+
+                    ON pr.proga = vr.proga
+
+                JOIN progekraji pk1 ON pk1.proga = vr.proga AND pk1.postaja= vr.postaja
+                JOIN postaja po ON vr.postaja = po.id
+
+                JOIN
+                (
+                SELECT vrr.postaja, vrr.cas_odhoda, vrr.proga, vrr.voznja FROM voznired vrr
+                                JOIN
+                                    (SELECT pr22.proga 
+                                    FROM progekraji pr22
+                                    JOIN
+                                        (SELECT proga, zaporedna_st from progekraji 
+                                        WHERE postaja = (SELECT id FROM postaja WHERE ime = vstopna)
+                                        GROUP BY proga, zaporedna_st) pr11
+
+                                    ON pr22.proga = pr11.proga
+                                    WHERE pr22.postaja = (SELECT id FROM postaja WHERE ime = iztopna)AND pr22.zaporedna_st > pr11.zaporedna_st
+                                    GROUP BY pr22.proga)  prr
+
+                                ON prr.proga = vrr.proga
+
+                JOIN progekraji pk11 ON pk11.proga = vrr.proga AND pk11.postaja= vrr.postaja
+                WHERE pk11.zaporedna_st >= (SELECT zaporedna_st FROM progekraji pkk WHERE pkk.proga = vrr.proga AND pkk.postaja = (SELECT id FROM postaja WHERE ime = vstopna)) 
+                AND pk11.zaporedna_st <= (SELECT zaporedna_st FROM progekraji pkk WHERE pkk.proga = vrr.proga AND pkk.postaja = (SELECT id FROM postaja WHERE ime = iztopna)) 
+                AND vrr.postaja = (SELECT id FROM postaja WHERE ime = vstopna)) vr11
+                    
+                ON vr11.proga = vr.proga AND vr11.voznja = vr.voznja
+                    WHERE pk1.zaporedna_st <= (SELECT zaporedna_st FROM progekraji pk WHERE pk.proga = vr.proga AND pk.postaja = (SELECT id FROM postaja WHERE ime = iztopna))
+                    AND pk1.zaporedna_st >= (SELECT zaporedna_st FROM progekraji pk WHERE pk.proga = vr.proga AND pk.postaja = (SELECT id FROM postaja WHERE ime = vstopna)) 
+                    ORDER BY vr11.cas_odhoda, zaporedna_st;
+' LANGUAGE SQL;
+
+-------------------------------------------------------------------------------------
+
+CREATE FUNCTION vozniRedZacetnaKoncna(vstopna text, iztopna text) RETURNS TABLE(postaja int, ime text, cas TIME) AS '
+    SELECT vr.postaja, po.ime, vr.cas_odhoda FROM voznired vr
+                    JOIN
+                        (SELECT pr2.proga 
+                        FROM progekraji pr2
+                        JOIN
+                            (SELECT proga, zaporedna_st from progekraji 
+                            WHERE postaja = (SELECT id FROM postaja WHERE ime = vstopna)
+                            GROUP BY proga, zaporedna_st) pr1
+
+                        ON pr2.proga = pr1.proga
+                        WHERE pr2.postaja = (SELECT id FROM postaja WHERE ime = iztopna) AND pr2.zaporedna_st > pr1.zaporedna_st
+                        GROUP BY pr2.proga)  pr
+
+                    ON pr.proga = vr.proga
+
+                JOIN progekraji pk1 ON pk1.proga = vr.proga AND pk1.postaja= vr.postaja
+                JOIN postaja po ON vr.postaja = po.id
+
+                JOIN
+                (
+                SELECT vrr.postaja, vrr.cas_odhoda, vrr.proga, vrr.voznja FROM voznired vrr
+                                JOIN
+                                    (SELECT pr22.proga 
+                                    FROM progekraji pr22
+                                    JOIN
+                                        (SELECT proga, zaporedna_st from progekraji 
+                                        WHERE postaja = (SELECT id FROM postaja WHERE ime = vstopna)
+                                        GROUP BY proga, zaporedna_st) pr11
+
+                                    ON pr22.proga = pr11.proga
+                                    WHERE pr22.postaja = (SELECT id FROM postaja WHERE ime = iztopna) AND pr22.zaporedna_st > pr11.zaporedna_st
+                                    GROUP BY pr22.proga)  prr
+
+                                ON prr.proga = vrr.proga
+
+                JOIN progekraji pk11 ON pk11.proga = vrr.proga AND pk11.postaja= vrr.postaja
+                WHERE pk11.zaporedna_st >= (SELECT zaporedna_st FROM progekraji pkk WHERE pkk.proga = vrr.proga AND pkk.postaja = (SELECT id FROM postaja WHERE ime = vstopna)) 
+                AND pk11.zaporedna_st <= (SELECT zaporedna_st FROM progekraji pkk WHERE pkk.proga = vrr.proga AND pkk.postaja = (SELECT id FROM postaja WHERE ime = iztopna)) 
+                AND vrr.postaja = (SELECT id FROM postaja WHERE ime = vstopna)) vr11
+                    
+                ON vr11.proga = vr.proga AND vr11.voznja = vr.voznja
+                    WHERE (vr.postaja = (SELECT id FROM postaja WHERE ime = vstopna) OR vr.postaja = (SELECT id FROM postaja WHERE ime = iztopna))
+                    ORDER BY vr11.cas_odhoda, zaporedna_st;
+' LANGUAGE SQL;
+

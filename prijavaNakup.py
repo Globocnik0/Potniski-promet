@@ -13,19 +13,20 @@ conn = psycopg2.connect(dbname = auth.db, host = auth.host, user = auth.user, pa
 cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
 def registracijaUporabnika(podatki): #podatki so [emso, ime, rojstvo, naslov, mail, geslo]
-    cur.execute(""" SELECT mail from potnik where mail = %s """, [podatki[4]])
+    cur.execute(""" SELECT mail from uporabnik where mail = %s """, [podatki[4]])
     mailObstaja = cur.fetchall()
     if mailObstaja:
         print("mail obstaja. Not cool maaaaaannnn.")
         return
 
-    cur.execute(""" SELECT emso from potnik where emso = '{}' """.format(podatki[0]))
+    cur.execute(""" SELECT emso from uporabnik where emso = %s """,[podatki[0]])
     emsoObstaja = cur.fetchall()
     if emsoObstaja:
         print("Obstajaš. Not cool maaaannnnnn.")
         return
 
-    cur.execute("""INSERT INTO potnik(emso, ime, rojstvo, naslov, mail, geslo) values (%s, %s, %s, %s, %s, %s)""", podatki)
+    podatki.append("potnik")
+    cur.execute("""INSERT INTO uporabnik(emso, ime, rojstvo, naslov, mail, geslo, naziv) values (%s, %s, %s, %s, %s, %s, %s)""", podatki)
     conn.commit()
         
 
@@ -35,14 +36,30 @@ def nakupKarte(podatki): #[emso, vrsta Karte], mejbi ne dela, mejbi pa dela
     vrsta = podatki[1]
     cur.execute("""SELECT velja FROM vozovnica WHERE id = {} """.format(vrsta))
     velja = cur.fetchall()[0][0]
-    cur.execute(""" UPDATE potnik 
+    cur.execute(""" UPDATE uporabnik 
                     SET vozovnica = %s, 
                     datum_veljavnosti = (SELECT (SELECT CURRENT_DATE + INTERVAL '%s day')::TIMESTAMP::DATE)
                     WHERE emso = '%s'""", [vrsta, velja, emso])
     conn.commit()
 
 # nakupKarte(["1835012", 1])
-# registracijaUporabnika(["000", "Kranj", "2022-02-02", "asdasdasd", "mailZaBednike", "123123123"] )
+#registracijaUporabnika(["000", "Kranj", "2022-02-02", "asdasdasd", "mailZaBednike", "123123123"] )
 
 def prijava(uporabniskoIme, geslo):
-    return
+    cur.execute(""" SELECT mail from uporabnik where mail = %s """, [uporabniskoIme])
+    mailObstaja = cur.fetchall()
+    
+    if mailObstaja == []:
+        print("Mail ne obstaja")
+        return False
+    
+    cur.execute(""" SELECT geslo from uporabnik where mail = %s """, [uporabniskoIme])
+    g = cur.fetchall()
+    if g[0][0] == geslo:
+        print("Pravilno geslo")
+        return True
+    else: 
+        print("Napačno geslo")
+        return False
+
+print(prijava("mailZaednike", "12313123"))

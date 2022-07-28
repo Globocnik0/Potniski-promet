@@ -167,6 +167,81 @@ def napolniTabeloPotnik(cur, stVnosov):
         komanda += niz
     cur.execute(komanda[:-1])
     
+#----UPORABNIK-------
+
+def napolniTabeloUporabnik(cur, stVnosovPotnik, stVnosovZaposleni):
+    komanda = """INSERT INTO uporabnik(emso, ime, rojstvo, naslov, naziv, vozovnica, datum_veljavnosti, mail, geslo) values"""
+    cur.execute(""" SELECT id from vozovnica""")
+    vozIds = cur.fetchall()
+    
+    emsos = [random.randint(1000000, 9000000) for m in range(stVnosovPotnik)]
+    emsos = list(set(emsos))
+    stVnosovPotnik = len(emsos)
+    imens = [pzg.imena[random.randint(0, len(pzg.imena)-1)] for m in range(stVnosovPotnik)]
+    primks = [pzg.priimki[random.randint(0, len(pzg.priimki)-1)] for m in range(stVnosovPotnik)]
+    rojstvs = [(random.randint(1, 28), random.randint(1, 12), random.randint(1960, 2000)) for m in range(stVnosovPotnik)]
+    naslovs = [pzg.naselja[random.randint(0, len(pzg.naselja)-1)] for m in range(stVnosovPotnik)]
+    stevilks = [random.randint(0, 1000) for m in range(stVnosovPotnik)]
+    nazivs = ["potnik" for m in range(stVnosovPotnik)]
+    vozovnicas = [vozIds[random.randint(0, len(vozIds)-2)][0] for m in range(stVnosovPotnik)]
+    datumis = [(random.randint(1, 28), random.randint(1, 12), random.randint(2021, 2022)) for m in range(stVnosovPotnik)]
+    llist = np.array([emsos, imens, primks, rojstvs, naslovs, stevilks, nazivs, vozovnicas, datumis])
+    vnosPotniki = transponiraj2(llist)
+    
+    for i, val in enumerate(vnosPotniki):
+        em = val[0]
+        ime = val[1].replace("'", "")
+        priimk = val[2].replace("'", "")
+        imPr = "'" + ime + " " + priimk + "'"
+        d = datum(val[3])
+        nas = val[4] + " " + str(val[5])
+        nas = nas.replace("' ", " ") + "'"
+        na = "'" + val[6] + "'"
+        ma = "'" + ime + "." + priimk + str(i) + "@gmail.com" + "'"
+        ges = "'123'"
+        voz = val[7]
+        dat = datum(val[8])
+        niz = "('{}', {}, {}, {}, {}, {}, {}, {}, {}),".format(em, imPr, d, nas, na, voz, dat, ma, ges)
+        komanda += niz
+    cur.execute(komanda[:-1])
+
+    komanda = """INSERT INTO uporabnik(emso, ime, rojstvo, naslov, naziv, vozovnica, datum_veljavnosti, mail, geslo) values"""
+    cur.execute(""" SELECT id from vozovnica""")
+    vozIds = cur.fetchall()
+    
+    emsos = [random.randint(9000001, 9999999) for m in range(stVnosovZaposleni)]
+    emsos = list(set(emsos))
+    stVnosovZaposleni = len(emsos)
+    imens = [pzg.imena[random.randint(0, len(pzg.imena)-1)] for m in range(stVnosovZaposleni)]
+    primks = [pzg.priimki[random.randint(0, len(pzg.priimki)-1)] for m in range(stVnosovZaposleni)]
+    rojstvs = [(random.randint(1, 28), random.randint(1, 12), random.randint(1960, 2000)) for m in range(stVnosovZaposleni)]
+    naslovs = [pzg.naselja[random.randint(0, len(pzg.naselja)-1)] for m in range(stVnosovZaposleni)]
+    stevilks = [random.randint(0, 1000) for m in range(stVnosovZaposleni)]
+    nazivs = [pzg.nazivi[random.randint(0,len(pzg.nazivi)-1)] for m in range(stVnosovZaposleni)]
+    vozovnicas = [4 for m in range(stVnosovZaposleni)]
+    datumis = [(random.randint(1, 28), random.randint(1, 12), random.randint(2021, 2022)) for m in range(stVnosovZaposleni)]
+    llist = np.array([emsos, imens, primks, rojstvs, naslovs, stevilks, nazivs, vozovnicas, datumis])
+    vnosPotniki = transponiraj2(llist)
+    
+    for i, val in enumerate(vnosPotniki):
+        em = val[0]
+        ime = val[1].replace("'", "")
+        priimk = val[2].replace("'", "")
+        imPr = "'" + ime + " " + priimk + "'"
+        d = datum(val[3])
+        nas = val[4] + " " + str(val[5])
+        nas = nas.replace("' ", " ") + "'"
+        na = val[6]
+        ma = "'" + ime + "." + priimk + str(i) + "@vozna.slo" + "'"
+        ges = "'123'"
+        voz = val[7]
+        dat = datum(val[8])
+        niz = "('{}', {}, {}, {}, {}, {}, {}, {}, {}),".format(em, imPr, d, nas, na, voz, dat, ma, ges)
+        komanda += niz
+    cur.execute(komanda[:-1])
+
+    
+
 
 #------PROGA------------------
 def napolniTabeloProga(cur):

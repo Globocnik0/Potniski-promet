@@ -7,8 +7,6 @@ psycopg2.extensions.register_type(psycopg2.extensions.UNICODE)
 
 import csv
 
-
-
 conn = psycopg2.connect(dbname = auth.db, host = auth.host, user = auth.user, password = auth.password)
 cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
@@ -73,7 +71,6 @@ def ustvariTabeloVozovnica():
     cur.execute(komanda)
     conn.commit()
 
-
 def ustvariTabeloPotnik():
     komanda = """
     CREATE TABLE potnik(
@@ -91,6 +88,23 @@ def ustvariTabeloPotnik():
     cur.execute(komanda)
     conn.commit()
 
+def ustvariTabeloUporabnik():
+    komanda = """
+    CREATE TABLE uporabnik(
+        emso TEXT PRIMARY KEY,
+        ime TEXT NOT NULL,
+        rojstvo DATE NOT NULL,
+        naslov TEXT NOT NULL,
+        naziv TEXT NOT NULL,
+        vozovnica INTEGER REFERENCES vozovnica(id),
+        datum_veljavnosti DATE,
+        mail TEXT NOT NULL UNIQUE,
+        geslo TEXT NOT NULL
+        )
+    """
+    cur.execute(komanda)
+    conn.commit()
+
 def ustvariTabeloVozovnica():
     komanda = """
     CREATE TABLE vozovnica(
@@ -102,6 +116,7 @@ def ustvariTabeloVozovnica():
     """
     cur.execute(komanda)
     conn.commit()
+
 def ustvariTabeloPostaja():
     komanda = """
     CREATE TABLE postaja(

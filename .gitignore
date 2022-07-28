@@ -6,6 +6,7 @@ test.py
 test2.py
 auth.py
 pravice.txt
+spletnaStran
 
 # C extensions
 *.so

@@ -192,13 +192,17 @@ def poisciVozniRed22(p1, p2):
     tabela = cur.fetchall()
     return tabela
 
+def vozniRedZacetnaKoncna(vstopna, iztopna):
+    cur.execute("""SELECT * from vozniRedZacetnaKoncna(%s, %s)""", [vstopna, iztopna])
+    tabela = cur.fetchall()
+    return tabela
 
 def poisciVozniRed3(p1, p2): #Vrne vozni red med dvema krajema z vmesnimi kraji s pravilnim časovnim zaporedjem
     cur.execute("""SELECT id FROM postaja WHERE ime = %s""", [p1])
     p11 = cur.fetchall()[0][0]
     cur.execute("""SELECT id FROM postaja WHERE ime = %s""", [p2])
     p22 = cur.fetchall()[0][0]
-    
+    print(p11, p22)
     cur.execute("""SELECT vr.postaja, po.ime, vr.cas_odhoda FROM voznired vr
                     JOIN
                         (SELECT pr2.proga 
@@ -244,6 +248,11 @@ def poisciVozniRed3(p1, p2): #Vrne vozni red med dvema krajema z vmesnimi kraji 
                     AND pk1.zaporedna_st >= (SELECT zaporedna_st FROM progekraji pk WHERE pk.proga = vr.proga AND pk.postaja = %s) 
                     ORDER BY vr11.cas_odhoda, zaporedna_st""", [p11, p22, p11, p22, p11, p22, p11, p22, p11])
 
+    tabela = cur.fetchall()
+    return tabela
+
+def vozniRed333(vstopna, iztopna):
+    cur.execute("""SELECT * from dobiVozniRed3(%s, %s)""", [vstopna, iztopna])
     tabela = cur.fetchall()
     return tabela
 
@@ -367,6 +376,6 @@ def vozniRedVGrupah(p1, p2):
     return grupe
 
 
-tabela = poisciVozniRed22("Kranj", "Ljubljana")
+tabela = vozniRedZacetnaKoncna("Kranj", "Ljubljana")
 
 print(tabulate(tabela))

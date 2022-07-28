@@ -32,6 +32,8 @@ tabele = ["model", "vlak", "zaposlen", "pregled", "vozovnica", "potnik", "postaj
 # zbrisiTabelo(cur, "proga")
 # zbrisiTabelo(cur, "voznired")
 # zbrisiTabelo(cur, "progekraji")
+# zbrisiTabelo(cur, "uporabnik")
+
 conn.commit()
 
 # ustvariTabeloModel()
@@ -45,10 +47,11 @@ conn.commit()
 # ustvariTabeloProga()
 # ustvariTabeloVozniRed()
 # ustvariTabeloProgeKraji()
+# ustvariTabeloUporabnik()
 conn.commit()
 
 #----POLNJENJE TABEL----------------
-#izbrisiCeloTabelo(cur, "potnik")
+izbrisiCeloTabelo(cur, "uporabnik")
 
 # napolniTabeloModel(cur)
 # print("tabela Model napolnjena")
@@ -80,4 +83,5 @@ conn.commit()
 # napolniTabeloVozniRed(cur)
 # print("tabela VozniRed napolnjena")
 
+# napolniTabeloUporabnik(cur, 2000, 20)
 conn.commit()

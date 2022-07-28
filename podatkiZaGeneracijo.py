@@ -395,11 +395,11 @@ komentarji = ["'Še eno jutro sivo bedno'",
 "'A če pomislim res ne vem a v meni je problem'",
 "'al pa v tem da dans ni dan za samomor'"]
 
-vozovnicaId = [1,2,3]
-vozovnicaIme = ["'Letna'", "'Upokojenska'", "'Mesečna'"]
-vozovnicaCena = [120, 20, 30]
-vozovnicaOpis = ["'Za_bogate'", "'Za_stare'", "'Za_revne'"]
-vozovnicaVelja = [365, 1000000, 30]
+vozovnicaId = [1,2,3,4]
+vozovnicaIme = ["'Letna'", "'Upokojenska'", "'Mesečna'", "'Zaposlena'"]
+vozovnicaCena = [120, 20, 30, 0]
+vozovnicaOpis = ["'Za_bogate'", "'Za_stare'", "'Za_revne'", "'Za_zaposlene'"]
+vozovnicaVelja = [365, 1000000, 30, 1000000]
 
 
 def randomInt():
