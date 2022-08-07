@@ -152,7 +152,3 @@ class Cas:
 
         return Cas(h, m, 0)
 
-c = Cas(122,60,0)
-print(c)
-c.preveriCas()
-print(c)
