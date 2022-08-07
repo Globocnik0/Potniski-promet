@@ -23,9 +23,8 @@ def registracijaUporabnika(podatki): #podatki so [emso, ime, rojstvo, naslov, ma
     if emsoObstaja:
         return False
 
-    podatki.append("potnik")
     print('registriran')
-    cur.execute("""INSERT INTO uporabnik(emso, ime, rojstvo, naslov, mail, geslo, naziv) values (%s, %s, %s, %s, %s, %s, %s)""", podatki)
+    cur.execute("""INSERT INTO uporabnik(emso, ime, rojstvo, naslov, mail, geslo) values (%s, %s, %s, %s, %s, %s)""", podatki)
     conn.commit()
     return True
         
@@ -60,4 +59,6 @@ def prijava(uporabniskoIme, geslo):
     else: 
         return "Napačno geslo"
 
+#podatki = ["0000", "Nekoime", "22-08-07", "Naslov", "mail@mail", "123a44"]
+#print(registracijaUporabnika(podatki))
 #print(prijava("mailZaednike", "12313123"))

@@ -21,7 +21,7 @@ tabele = ["model", "vlak", "zaposlen", "pregled", "vozovnica", "potnik", "postaj
 #izbrisiVse(cur, tabele)
 #USTVARJANJE TABEL -----------------------
 
-zbrisiTabelo(cur, "model")
+#zbrisiTabelo(cur, "model")
 # zbrisiTabelo(cur, "vlak")
 # zbrisiTabelo(cur, "zaposlen")
 # zbrisiTabelo(cur, "pregled")
@@ -32,11 +32,11 @@ zbrisiTabelo(cur, "model")
 # zbrisiTabelo(cur, "proga")
 # zbrisiTabelo(cur, "voznired")
 # zbrisiTabelo(cur, "progekraji")
-# zbrisiTabelo(cur, "uporabnik")
+#zbrisiTabelo(cur, "uporabnik")
 
 conn.commit()
 
-ustvariTabeloModel()
+#ustvariTabeloModel()
 # ustvariTabeloVlak()
 # ustvariTabeloZaposlen()
 # ustvariTabeloPregled()
@@ -47,7 +47,7 @@ ustvariTabeloModel()
 # ustvariTabeloProga()
 # ustvariTabeloVozniRed()
 # ustvariTabeloProgeKraji()
-# ustvariTabeloUporabnik()
+#ustvariTabeloUporabnik()
 conn.commit()
 
 #----POLNJENJE TABEL----------------
