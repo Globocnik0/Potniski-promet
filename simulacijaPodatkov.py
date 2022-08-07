@@ -261,7 +261,6 @@ def napolniTabeloProga(cur):
             pro.append(p)
         proStr = ",".join(pro)
         progs.append(proStr)
-    print(progs)
     llist = np.array([ids, progs])
     vnosProge = transponiraj2(llist)
     for val in vnosProge:
@@ -276,8 +275,6 @@ def napolniTabeloProga(cur):
 def napolniTabeloProgeKraji(cur):
     cur.execute("""SELECT * FROM proga""")
     prIds, prStr = np.transpose(np.array(cur.fetchall()))
-    print(prIds)
-    print(prStr)
     komanda = """INSERT INTO progeKraji(proga, postaja, zaporedna_st) values"""
     for i in range(len(prIds)):
         prId = int(prIds[i])
@@ -321,7 +318,6 @@ def napolniTabeloVozniRed(cur):
         postaje = list(np.transpose(np.array(cur.fetchall()))[0])
         casiMedPostajami = [random.randint(5,15) for i in range(len(postaje)-1)]
         casiMedPostajami = [0] + casiMedPostajami
-        #print("casi med postajami", casiMedPostajami)
         t = 0
         j = 0
         vz = 0

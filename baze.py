@@ -96,7 +96,6 @@ def ustvariTabeloUporabnik():
         ime TEXT NOT NULL,
         rojstvo DATE NOT NULL,
         naslov TEXT NOT NULL,
-        naziv TEXT NOT NULL,
         vozovnica INTEGER REFERENCES vozovnica(id),
         datum_veljavnosti DATE,
         mail TEXT NOT NULL UNIQUE,
