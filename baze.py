@@ -15,7 +15,8 @@ def ustvariTabeloModel():
         CREATE TABLE model(
             id SERIAL PRIMARY KEY,
             kapaciteta INTEGER NOT NULL,
-            teza FLOAT
+            teza FLOAT,
+            ime TEXT
         )
     """
     cur.execute(komanda)

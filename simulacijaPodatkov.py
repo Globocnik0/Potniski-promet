@@ -21,15 +21,14 @@ def transponiraj2(a):
 
 #----MODEL---------
 
-
-
 def napolniTabeloModel(cur):
     capList = [50, 100, 150, 200, 300]
     tezaList = [10, 12, 20, 20, 23]
-    vnosModel = transponiraj(capList, tezaList)
-    komanda = """INSERT INTO model(kapaciteta, teza) values"""
+    imeList = ["taHitr", "taPocasn", "taVelik", "zaKolo", "zaPivoInCvetje"]
+    vnosModel = transponiraj2([capList, tezaList, imeList])
+    komanda = """INSERT INTO model(kapaciteta, teza, ime) values"""
     for val in vnosModel:
-        niz = "({}, {}),".format(val[0], val[1])
+        niz = "({}, {}, '{}'),".format(val[0], val[1], val[2])
         komanda += niz
     cur.execute(komanda[:-1])
     
@@ -292,8 +291,6 @@ def napolniTabeloProgeKraji(cur):
             komanda += niz
     cur.execute(komanda[:-1])
     
-
-
 
 #------VOZNI RED----------------------------
 def napolniTabeloVozniRed(cur):
