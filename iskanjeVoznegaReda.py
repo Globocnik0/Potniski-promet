@@ -376,6 +376,5 @@ def vozniRedVGrupah(p1, p2):
     return grupe
 
 
-tabela = vozniRedZacetnaKoncna("Kranj", "Ljubljana")
+#tabela = vozniRedZacetnaKoncna("Kranj", "Ljubljana")
 
-print(tabulate(tabela))

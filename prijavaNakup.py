@@ -16,18 +16,18 @@ def registracijaUporabnika(podatki): #podatki so [emso, ime, rojstvo, naslov, ma
     cur.execute(""" SELECT mail from uporabnik where mail = %s """, [podatki[4]])
     mailObstaja = cur.fetchall()
     if mailObstaja:
-        print("mail obstaja. Not cool maaaaaannnn.")
-        return
+        return False
 
     cur.execute(""" SELECT emso from uporabnik where emso = %s """,[podatki[0]])
     emsoObstaja = cur.fetchall()
     if emsoObstaja:
-        print("Obstajaš. Not cool maaaannnnnn.")
-        return
+        return False
 
     podatki.append("potnik")
+    print('registriran')
     cur.execute("""INSERT INTO uporabnik(emso, ime, rojstvo, naslov, mail, geslo, naziv) values (%s, %s, %s, %s, %s, %s, %s)""", podatki)
     conn.commit()
+    return True
         
 
 def nakupKarte(podatki): #[emso, vrsta Karte], mejbi ne dela, mejbi pa dela
@@ -50,16 +50,14 @@ def prijava(uporabniskoIme, geslo):
     mailObstaja = cur.fetchall()
     
     if mailObstaja == []:
-        print("Mail ne obstaja")
-        return False
+        return "Mail ne obstaja"
+
     
     cur.execute(""" SELECT geslo from uporabnik where mail = %s """, [uporabniskoIme])
     g = cur.fetchall()
     if g[0][0] == geslo:
-        print("Pravilno geslo")
         return True
     else: 
-        print("Napačno geslo")
-        return False
+        return "Napačno geslo"
 
-print(prijava("mailZaednike", "12313123"))
+#print(prijava("mailZaednike", "12313123"))
