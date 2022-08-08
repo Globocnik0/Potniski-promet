@@ -24,6 +24,11 @@
 						<br>
 
 						<div class="form-group">
+							<label for="naslov">Addres :</label> <input class="form-control-lg" id="naslov" name="naslov" placeholder="Vpiši naslov" type="text">
+						</div>
+						<br>
+
+						<div class="form-group">
 							<label for="email">Email :</label> <input class="form-control-lg" id="email" name="email" placeholder="Vpiši elektronski naslov" type="email">
 						</div>
 						<br>

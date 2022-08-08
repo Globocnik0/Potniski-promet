@@ -5,9 +5,9 @@
         </h1>
 
         <table>
-            % for row in traffic_data:
+            % for (ime, cas) in traffic_data:
             <tr> 
-                <td>{{row}}</td>
+                <td>Vstopna postaja: {{ime}} Cas: {{cas}}</td>
             </tr>
             % end
         </table>

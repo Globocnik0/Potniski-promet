@@ -45,12 +45,13 @@ def login_post():
     emso = bottle.request.forms['emso']
     username = bottle.request.forms['ime']
     rojstvo = bottle.request.forms['rojstvo']
+    naslov = bottle.request.forms['naslov']
     email = bottle.request.forms['email']
     password = bottle.request.forms['password']
     first_time_user = bottle.request.forms.first_login
     if first_time_user == 'on':
         if re.search("^[A-Za-z0-9]*$", username) and re.search("^[A-Za-z0-9]*$",password):
-            if registracijaUporabnika([emso, username, rojstvo, email, password]): #there is an error in this line
+            if registracijaUporabnika([emso, username, rojstvo, naslov, email, password]): #there is an error in this line
                 bottle.redirect('/')
             else:
                 return bottle.template('login.tpl', alert='Your EMŠO or email are already registred')

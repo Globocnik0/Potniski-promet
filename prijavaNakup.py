@@ -59,6 +59,6 @@ def prijava(uporabniskoIme, geslo):
     else: 
         return "Napačno geslo"
 
-#podatki = ["0000", "Nekoime", "22-08-07", "Naslov", "mail@mail", "123a44"]
+#podatki = ["8", "Alex", "08-08-2022", "Britof", "abcd@mail", "123123"]
 #print(registracijaUporabnika(podatki))
 #print(prijava("mailZaednike", "12313123"))
