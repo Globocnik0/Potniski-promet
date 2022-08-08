@@ -145,7 +145,7 @@ def poisciVozniRed22(p1, p2):
     cur.execute("""SELECT id FROM postaja WHERE ime = %s""", [p2])
     p22 = cur.fetchall()[0][0]
     
-    cur.execute("""SELECT vr.postaja, po.ime, vr.cas_odhoda FROM voznired vr
+    cur.execute("""SELECT po.ime, CAST(vr.cas_odhoda AS TEXT) FROM voznired vr
                     JOIN
                         (SELECT pr2.proga 
                         FROM progekraji pr2
@@ -376,5 +376,7 @@ def vozniRedVGrupah(p1, p2):
     return grupe
 
 
-#tabela = vozniRedZacetnaKoncna("Kranj", "Ljubljana")
+#tabela = poisciVozniRed22("Kranj", "Ljubljana")
+#print(tabela)
+#print(tabulate(tabela))
 

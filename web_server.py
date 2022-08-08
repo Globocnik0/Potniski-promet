@@ -32,8 +32,8 @@ def search_get():
 def search():
     station_1 = bottle.request.forms['station_1']
     station_2 = bottle.request.forms['station_2']
-    print(poisciVozniRed2(station_1, station_2))
-    return bottle.template('display_traffic.tpl', traffic_data = poisciVozniRed2(station_1, station_2))
+    print(poisciVozniRed22(station_1, station_2))
+    return bottle.template('display_traffic.tpl', traffic_data = poisciVozniRed22(station_1, station_2))
 
 
 @bottle.get('/login/')
@@ -68,4 +68,4 @@ def login_post():
 
 
 
-bottle.run(debug=True, reloader=True)
+bottle.run(debug=True, reloader=True, host = "localhost", port = 8081)
