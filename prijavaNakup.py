@@ -49,7 +49,7 @@ def prijava(uporabniskoIme, geslo):
     mailObstaja = cur.fetchall()
     
     if mailObstaja == []:
-        return "Mail ne obstaja"
+        return False
 
     
     cur.execute(""" SELECT geslo from uporabnik where mail = %s """, [uporabniskoIme])
@@ -57,8 +57,19 @@ def prijava(uporabniskoIme, geslo):
     if g[0][0] == geslo:
         return True
     else: 
-        return "Napačno geslo"
+        return False
+
+def dobiEmso(mail):
+    cur.execute("""SELECT emso FROM uporabnik WHERE mail = %s """, [mail])
+    podatki = cur.fetchall()
+    return podatki[0][0]
+
+def informacijeUporabnika(emso):
+    cur.execute("""SELECT ime, rojstvo, naslov, vozovnica, datum_veljavnosti, mail FROM uporabnik WHERE emso = %s """, [emso])
+    podatki = cur.fetchall()
+    return podatki[0]
 
 #podatki = ["8", "Alex", "08-08-2022", "Britof", "abcd@mail", "123123"]
 #print(registracijaUporabnika(podatki))
-#print(prijava("mailZaednike", "12313123"))
+#print(informacijeUporabnika("0000"))
+#print(dobiEmso("nekej@asd"))

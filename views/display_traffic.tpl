@@ -5,9 +5,18 @@
         </h1>
 
         <table>
-            % for (ime, cas) in traffic_data:
+            % for i, (ime, cas) in enumerate(traffic_data):
             <tr> 
-                <td>Vstopna postaja: {{ime}} Cas: {{cas}}</td>
+                <td>
+                % if i%2 == 0:
+                    Vstopna postaja: {{ime}} Cas: {{cas}}
+                % else:
+                    Iztopna postaja: {{ime}} Cas: {{cas}}
+                
+                % end
+                
+                </td>
+                
             </tr>
             % end
         </table>

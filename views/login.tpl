@@ -9,26 +9,6 @@
 					<form action="/login/" method="post">
 
 						<div class="form-group">
-							<label for="emso">EMŠO :</label> <input class="form-control-lg" id="emso" name="emso" placeholder="Vpiši EMŠO" required="" type="number">
-						</div>
-						<br>
-
-						<div class="form-group">
-							<label for="ime">Username :</label> <input class="form-control-lg" id="ime" name="ime" placeholder="Vpiši ime" required="" type="text">
-						</div>
-						<br>
-
-						<div class="form-group">
-							<label for="rojstvo">Birthdate :</label> <input class="form-control-lg" id="rojstvo" name="rojstvo" placeholder="Vpiši rojstvo" type="date">
-						</div>
-						<br>
-
-						<div class="form-group">
-							<label for="naslov">Addres :</label> <input class="form-control-lg" id="naslov" name="naslov" placeholder="Vpiši naslov" type="text">
-						</div>
-						<br>
-
-						<div class="form-group">
 							<label for="email">Email :</label> <input class="form-control-lg" id="email" name="email" placeholder="Vpiši elektronski naslov" type="email">
 						</div>
 						<br>
@@ -37,7 +17,6 @@
 							<label for="password">Password :</label> <input class="form-control-lg" id="password" name="password" placeholder="Enter Password" required="" type="password">
 						</div>
 						
-						<input class="form-check-input" id="first_login" name="first_login" type="checkbox"> I don't have an account/register me!<br>
 						<br>
 						<div class="align-center">
 							<button class="btn btn-success" type="submit">Log in</button>
