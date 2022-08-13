@@ -96,8 +96,6 @@ def ustvariTabeloUporabnik():
         ime TEXT NOT NULL,
         rojstvo DATE NOT NULL,
         naslov TEXT NOT NULL,
-        vozovnica INTEGER REFERENCES vozovnica(id),
-        datum_veljavnosti DATE,
         mail TEXT NOT NULL UNIQUE,
         geslo TEXT NOT NULL
         )
@@ -168,6 +166,7 @@ def ustvariTabeloVozniRed():
     conn.commit()
 
 def ustvariTabeloProgeKraji():
+
     komanda = """ CREATE TABLE progeKraji(
                 proga INTEGER,
                 postaja INTEGER,
@@ -177,6 +176,23 @@ def ustvariTabeloProgeKraji():
     """
     cur.execute(komanda)
     conn.commit()
+
+def ustvariTabeloKupljeneKarte():
+    komanda = """ CREATE TABLE kupljeneKarte(
+                id SERIAL PRIMARY KEY UNIQUE,
+                uporabnik TEXT REFERENCES uporabnik(emso),
+                vrstaKarte INTEGER REFERENCES vozovnica(id),
+                datum_Nakupa DATE,
+                datumVeljavnosti DATE,
+                vstopnaPostaja INTEGER REFERENCES postaja(id),
+                iztopnaPostaja INTEGER REFERENCES postaja(id),
+                cena FLOAT,
+                velja INTEGER
+                )
+    """
+    cur.execute(komanda)
+    conn.commit()
+
 
 def zbrisiTabelo(cur, ImeTabele):
     komanda = """
