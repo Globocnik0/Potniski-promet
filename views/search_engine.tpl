@@ -1,6 +1,7 @@
 %rebase("base.tpl")
 
         <h1 style="color:rgb(59, 182, 110);">
+            % if 
             Greetings fellow passenger! Choose a destination of your next travel.
         </h1>
 

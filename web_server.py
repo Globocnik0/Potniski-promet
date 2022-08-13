@@ -24,13 +24,13 @@ def redirect():
 
 @bottle.get('/search/')
 def search_get():
-    return bottle.template('search_engine.tpl')
+    emso = bottle.request.get_cookie('Logged')
+    return bottle.template('search_engine.tpl', user = emso)
 
 @bottle.post('/search/')
 def search():
     station_1 = bottle.request.forms['station_1']
     station_2 = bottle.request.forms['station_2']
-    print(poisciVozniRed22(station_1, station_2))
     return bottle.template('display_traffic.tpl', traffic_data = poisciVozniRed22(station_1, station_2))
 
 
@@ -46,24 +46,15 @@ def register_post():
     naslov = bottle.request.forms['naslov']
     email = bottle.request.forms['email']
     password = bottle.request.forms['password']
-    first_time_user = bottle.request.forms.first_login
-    if first_time_user == 'on':
-        if re.search("^[A-Za-z0-9]*$", username) and re.search("^[A-Za-z0-9]*$",password):
-            if registracijaUporabnika([emso, username, rojstvo, naslov, email, password]): #dodal sm naslov
-                bottle.redirect('/')
-            else:
-                return bottle.template('login.tpl', alert='Your EMŠO or email are already registred')
+    #first_time_user = bottle.request.forms.first_login
+    if re.search("^[A-Za-z0-9]*$", username) and re.search("^[A-Za-z0-9]*$",password):
+        if registracijaUporabnika([emso, username, rojstvo, naslov, email, password]): #dodal sm naslov
+            bottle.template('login.tpl', alert='Now you can also log in')
         else:
-            return bottle.template(
-                'login.tpl',
-                alert='Only permitted characters are A-Z, a-z, 0-9.')
+            return bottle.template('register.tpl', alert='Your EMŠO or email are already registred')
     else:
-        if prijava(username, password):
-            bottle.response.set_cookie('Logged', username)
-            bottle.redirect('/')
-        else:
-            return bottle.template('login.tpl', alert = prijava(username, password))
-    return bottle.template('login.tpl', alert='')
+        return bottle.template('register.tpl', alert='Only permitted characters are A-Z, a-z, 0-9.')
+
 
 @bottle.get('/login/')
 def login():
@@ -75,7 +66,8 @@ def login_post():
     password = bottle.request.forms['password']
     if prijava(email, password): #dodal sm naslov
         emso = dobiEmso(email)
-        bottle.redirect('/uporabnik/{}/'.format(emso))
+        bottle.response.set_cookie('Logged', emso)
+        bottle.redirect('/')
     else:
         return bottle.template('login.tpl', alert='Napačen email ali geslo')
 

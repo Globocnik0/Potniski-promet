@@ -9,17 +9,17 @@
 					<form action="/register/" method="post">
 
 						<div class="form-group">
-							<label for="emso">EMŠO :</label> <input class="form-control-lg" id="emso" name="emso" placeholder="Vpiši EMŠO" required="" type="number">
+							<label for="emso">EMŠO :</label> <input class="form-control-lg" id="emso" name="emso" placeholder="Put in your EMŠO" required="" type="number">
 						</div>
 						<br>
 
 						<div class="form-group">
-							<label for="ime">Username :</label> <input class="form-control-lg" id="ime" name="ime" placeholder="Vpiši ime" required="" type="text">
+							<label for="ime">Username :</label> <input class="form-control-lg" id="ime" name="ime" placeholder="Put in username" required="" type="text">
 						</div>
 						<br>
 
 						<div class="form-group">
-							<label for="rojstvo">Birthdate :</label> <input class="form-control-lg" id="rojstvo" name="rojstvo" placeholder="Vpiši rojstvo" type="date">
+							<label for="rojstvo">Birthdate :</label> <input class="form-control-lg" id="rojstvo" name="rojstvo" placeholder="Put in your birthadate" type="date">
 						</div>
 						<br>
 
@@ -36,9 +36,8 @@
 						<div class="form-group">
 							<label for="password">Password :</label> <input class="form-control-lg" id="password" name="password" placeholder="Enter Password" required="" type="password">
 						</div>
-						
-						<input class="form-check-input" id="first_login" name="first_login" type="checkbox"> I don't have an account/register me!<br>
 						<br>
+						
 						<div class="align-center">
 							<button class="btn btn-success" type="submit">Register</button>
 						</div>
