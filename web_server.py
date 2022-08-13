@@ -18,14 +18,15 @@ def serve_static_icon(filename):
     return bottle.static_file(
         filename, root=os.path.join(os.getcwd(), "database"))
 
-@bottle.get('/')#tole prej ni blo tko
+@bottle.get('/')
 def redirect():
     bottle.redirect('/search/')
 
 @bottle.get('/search/')
 def search_get():
     emso = bottle.request.get_cookie('Logged')
-    return bottle.template('search_engine.tpl', user = emso)
+    username = informacijeUporabnika(emso)[0][0]
+    return bottle.template('search_engine.tpl', user = username)
 
 @bottle.post('/search/')
 def search():
@@ -36,6 +37,8 @@ def search():
 
 @bottle.get('/register/')
 def register():
+    if bottle.request.get_cookie('Logged'):
+        bottle.redirect('/')
     return bottle.template('register.tpl', alert='')
 
 @bottle.post('/register/')
@@ -49,7 +52,7 @@ def register_post():
     #first_time_user = bottle.request.forms.first_login
     if re.search("^[A-Za-z0-9]*$", username) and re.search("^[A-Za-z0-9]*$",password):
         if registracijaUporabnika([emso, username, rojstvo, naslov, email, password]): #dodal sm naslov
-            bottle.template('login.tpl', alert='Now you can also log in')
+            return bottle.template('login.tpl', alert='Now you can also log in')
         else:
             return bottle.template('register.tpl', alert='Your EMŠO or email are already registred')
     else:
@@ -58,6 +61,8 @@ def register_post():
 
 @bottle.get('/login/')
 def login():
+    if bottle.request.get_cookie('Logged'):
+        bottle.redirect('/')
     return bottle.template('login.tpl', alert='')
 
 @bottle.post('/login/')
@@ -66,14 +71,14 @@ def login_post():
     password = bottle.request.forms['password']
     if prijava(email, password): #dodal sm naslov
         emso = dobiEmso(email)
-        bottle.response.set_cookie('Logged', emso)
+        bottle.response.set_cookie('Logged', emso, path = '/')
         bottle.redirect('/')
     else:
         return bottle.template('login.tpl', alert='Napačen email ali geslo')
 
 
-@bottle.get('/uporabnik/<emso>/')
-def uporabnik(emso):
-    return "Čestitam za prijavo {0}".format(emso)
+# @bottle.get('/uporabnik/<emso>/')
+# def uporabnik(emso):
+#     return "Čestitam za prijavo {0}".format(emso)
 
 bottle.run(debug=True, reloader=True, host = "localhost", port = 8081) #dodal port pa localhost ker nevem koko točn to dela

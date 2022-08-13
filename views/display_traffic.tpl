@@ -7,16 +7,16 @@
         <table>
             % for i, (ime, cas) in enumerate(traffic_data):
             <tr> 
-                <td>
                 % if i%2 == 0:
-                    Vstopna postaja: {{ime}} Cas: {{cas}}
+                <td>Vstopna postaja: {{ime}} </td> <td>Cas: {{cas}}</td> <td rowspan="2"> <a href='' >Buy ticket</a> </td>
                 % else:
-                    Iztopna postaja: {{ime}} Cas: {{cas}}
+                <td>Iztopna postaja: {{ime}} </td> <td>Cas: {{cas}}</td>
                 
                 % end
-                
-                </td>
-                
             </tr>
             % end
         </table>
+
+        <a href='' >Buy mothly ticket for this relation</a>
+        <a href='' >Buy student mothly ticket for this relation</a>
+        <a href='' >Buy pensioner monthly ticket for this relation</a>
