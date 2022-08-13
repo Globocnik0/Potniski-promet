@@ -25,8 +25,12 @@ def redirect():
 @bottle.get('/search/')
 def search_get():
     emso = bottle.request.get_cookie('Logged')
-    username = informacijeUporabnika(emso)[0][0]
-    return bottle.template('search_engine.tpl', user = username)
+    if emso:
+        print(emso)
+        username = informacijeUporabnika(emso)[0][0]
+        return bottle.template('search_engine.tpl', user = username)
+    else:
+        return bottle.template('search_engine.tpl', user = 'fellow passenger')
 
 @bottle.post('/search/')
 def search():
