@@ -7,16 +7,12 @@
         <table>
             % for i, (ime, cas) in enumerate(traffic_data):
             <tr> 
-                <td>
                 % if i%2 == 0:
-                    Vstopna postaja: {{ime}} Cas: {{cas}}
+                <td>Vstopna postaja: {{ime}} </td> <td>Cas: {{cas}}</td> <td rowspan="2">Buy ticket</td>
                 % else:
-                    Iztopna postaja: {{ime}} Cas: {{cas}}
+                <td>Iztopna postaja: {{ime}} </td> <td>Cas: {{cas}}</td>
                 
                 % end
-                
-                </td>
-                
             </tr>
             % end
         </table>

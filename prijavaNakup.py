@@ -67,9 +67,9 @@ def dobiEmso(mail):
 def informacijeUporabnika(emso):
     cur.execute("""SELECT ime, rojstvo, naslov, vozovnica, datum_veljavnosti, mail FROM uporabnik WHERE emso = %s """, [emso])
     podatki = cur.fetchall()
-    return podatki[0]
+    return podatki
 
-#podatki = ["8", "Alex", "08-08-2022", "Britof", "abcd@mail", "123123"]
+#podatki = ["8", "Alex", "08-08-2022", "Britof", "abcd@mail", "123123"] a si zih da ni tko černe? [['a', datetime.date(1, 11, 11), 'a', None, None, 'a@a']]
 #print(registracijaUporabnika(podatki))
 #print(informacijeUporabnika("0000"))
 #print(dobiEmso("nekej@asd"))

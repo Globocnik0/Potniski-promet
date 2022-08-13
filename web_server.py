@@ -25,7 +25,8 @@ def redirect():
 @bottle.get('/search/')
 def search_get():
     emso = bottle.request.get_cookie('Logged')
-    return bottle.template('search_engine.tpl', user = emso)
+    username = informacijeUporabnika(emso)[0][0]
+    return bottle.template('search_engine.tpl', user = username)
 
 @bottle.post('/search/')
 def search():
@@ -36,6 +37,8 @@ def search():
 
 @bottle.get('/register/')
 def register():
+    if bottle.request.get_cookie('Logged'):
+        bottle.redirect('/')
     return bottle.template('register.tpl', alert='')
 
 @bottle.post('/register/')
@@ -58,6 +61,8 @@ def register_post():
 
 @bottle.get('/login/')
 def login():
+    if bottle.request.get_cookie('Logged'):
+        bottle.redirect('/')
     return bottle.template('login.tpl', alert='')
 
 @bottle.post('/login/')
