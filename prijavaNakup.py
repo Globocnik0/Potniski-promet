@@ -29,16 +29,18 @@ def registracijaUporabnika(podatki): #podatki so [emso, ime, rojstvo, naslov, ma
     return True
         
 
-def nakupKarte(podatki): #[emso, vrsta Karte], mejbi ne dela, mejbi pa dela
+def nakupKarte(podatki): #[emso, vpostaja, ipostaja, vrsta Karte, cena]
     
     emso = podatki[0]
-    vrsta = podatki[1]
+    vpostaja = podatki[1]
+    ipostaja = podatki[2]
+    vrsta = podatki[3]
+    cena = podatki[4]
     cur.execute("""SELECT velja FROM vozovnica WHERE id = {} """.format(vrsta))
     velja = cur.fetchall()[0][0]
-    cur.execute(""" UPDATE uporabnik 
-                    SET vozovnica = %s, 
-                    datum_veljavnosti = (SELECT (SELECT CURRENT_DATE + INTERVAL '%s day')::TIMESTAMP::DATE)
-                    WHERE emso = '%s'""", [vrsta, velja, emso])
+    cur.execute(""" INSERT INTO kupljeneKarte (uporabnik, vrstakarte, datum_nakupa, datumveljavnosti, vstopnaPostaja, iztopnaPostaja, cena)
+                    values(%s, %s, (SELECT CURRENT_DATE), (SELECT (SELECT CURRENT_DATE + INTERVAL '%s day')::TIMESTAMP::DATE), %s,%s,%s)
+                    """, [emso, vrsta, velja, vpostaja, ipostaja, cena])
     conn.commit()
 
 # nakupKarte(["1835012", 1])
@@ -65,11 +67,22 @@ def dobiEmso(mail):
     return podatki[0][0]
 
 def informacijeUporabnika(emso):
-    cur.execute("""SELECT ime, rojstvo, naslov, vozovnica, datum_veljavnosti, mail FROM uporabnik WHERE emso = %s """, [emso])
+    cur.execute("""SELECT ime, rojstvo, naslov, mail FROM uporabnik WHERE emso = %s """, [emso])
     podatki = cur.fetchall()
-    return podatki
+    return podatki[0]
 
-#podatki = ["8", "Alex", "08-08-2022", "Britof", "abcd@mail", "123123"] a si zih da ni tko černe? [['a', datetime.date(1, 11, 11), 'a', None, None, 'a@a']]
+def informacijeUporabnikaNakupi(emso):
+    cur.execute("""SELECT opis, datum_nakupa, datumveljavnosti, vstopnapostaja, iztopnapostaja, kk.velja FROM kupljenekarte kk
+                    JOIN vozovnica v on v.id = kk.vrstakarte
+                    WHERE kk.uporabnik = %s""", [emso])
+    podatki = cur.fetchall()
+    return podatki #vrne opis karte, datum nakupa, datumveljavnosti, vstopnapostaja, iztopnapostaja, velja(boolean)
+
+
+#podatki = ["8", "Alex", "08-08-2022", "Britof", "abcd@mail", "123123"]
 #print(registracijaUporabnika(podatki))
 #print(informacijeUporabnika("0000"))
 #print(dobiEmso("nekej@asd"))
+#podatkiNakupKarte = ["8", None, None, 1, 102] #[emso, vpostaja, ipostaja, vrsta Karte, cena]
+#nakupKarte(podatkiNakupKarte)
+#rint(informacijeUporabnikaNakupi("8"))
