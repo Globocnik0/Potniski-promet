@@ -15,6 +15,13 @@
 		<div>
 				<a style="margin-left: 2em" href="/login/">Log in</a>
 		</div>
+
+		<div>
+			<a style="margin-left: 70em" href="/logout/">Log out</a>
+			<!-- <form action="/logout/" class="form-inline my-2 my-lg-0" method="post">
+				<input class="btn btn-success my-2 my-sm-0" type="submit" value='Log out'>
+			</form> katera koda je boljša??-->
+		</div>
 	</nav>
 	<div class="container">
 		{{!base}}

@@ -26,8 +26,7 @@ def redirect():
 def search_get():
     emso = bottle.request.get_cookie('Logged')
     if emso:
-        print(emso)
-        username = informacijeUporabnika(emso)[0][0]
+        username = informacijeUporabnika(emso)[0]
         return bottle.template('search_engine.tpl', user = username)
     else:
         return bottle.template('search_engine.tpl', user = 'fellow passenger')
@@ -79,6 +78,11 @@ def login_post():
         bottle.redirect('/')
     else:
         return bottle.template('login.tpl', alert='Napačen email ali geslo')
+
+@bottle.get('/logout/')
+def logout():
+    bottle.response.set_cookie('Logged', '', path='/', expires=0)
+    bottle.redirect('/')
 
 
 # @bottle.get('/uporabnik/<emso>/')
