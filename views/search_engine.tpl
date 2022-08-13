@@ -1,8 +1,11 @@
 %rebase("base.tpl")
 
         <h1 style="color:rgb(59, 182, 110);">
-            % if 
+            % if user:
+            Greetings {{user}}! Choose a destination of your next travel.
+            % else:
             Greetings fellow passenger! Choose a destination of your next travel.
+            % end
         </h1>
 
         <center>

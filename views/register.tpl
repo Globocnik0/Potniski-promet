@@ -9,27 +9,27 @@
 					<form action="/register/" method="post">
 
 						<div class="form-group">
-							<label for="emso">EMŠO :</label> <input class="form-control-lg" id="emso" name="emso" placeholder="Put in your EMŠO" required="" type="number">
+							<label for="emso">EMŠO :</label> <input class="form-control-lg" id="emso" name="emso" placeholder="Enter your EMŠO" required="" type="number">
 						</div>
 						<br>
 
 						<div class="form-group">
-							<label for="ime">Username :</label> <input class="form-control-lg" id="ime" name="ime" placeholder="Put in username" required="" type="text">
+							<label for="ime">Username :</label> <input class="form-control-lg" id="ime" name="ime" placeholder="Enter username" required="" type="text">
 						</div>
 						<br>
 
 						<div class="form-group">
-							<label for="rojstvo">Birthdate :</label> <input class="form-control-lg" id="rojstvo" name="rojstvo" placeholder="Put in your birthadate" type="date">
+							<label for="rojstvo">Birthdate :</label> <input class="form-control-lg" id="rojstvo" name="rojstvo" placeholder="Enter birthdate" type="date">
 						</div>
 						<br>
 
 						<div class="form-group">
-							<label for="naslov">Addres :</label> <input class="form-control-lg" id="naslov" name="naslov" placeholder="Vpiši naslov" type="text">
+							<label for="naslov">Addres :</label> <input class="form-control-lg" id="naslov" name="naslov" placeholder="Enter adress" type="text">
 						</div>
 						<br>
 
 						<div class="form-group">
-							<label for="email">Email :</label> <input class="form-control-lg" id="email" name="email" placeholder="Vpiši elektronski naslov" type="email">
+							<label for="email">Email :</label> <input class="form-control-lg" id="email" name="email" placeholder="Enter email" type="email">
 						</div>
 						<br>
 						
