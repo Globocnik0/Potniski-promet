@@ -7,7 +7,9 @@
 </head>
 <body>
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
-		<a class="navbar-brand" href="">Passenger traffic</a> <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarSupportedContent" data-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span></button>
+		<a class="navbar-brand" href="/">Passenger traffic</a> <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarSupportedContent" data-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span></button>
+		
+		% if not username:
 		<div>
 				<a style="margin-left: 2em" href="/register/">Register</a>
 		</div>
@@ -15,13 +17,15 @@
 		<div>
 				<a style="margin-left: 2em" href="/login/">Log in</a>
 		</div>
-
+		% else:
+		{{username}} Logged in
 		<div>
-			<a style="margin-left: 70em" href="/logout/">Log out</a>
+			<a style="margin-left: 68em" href="/logout/">Log out</a>
 			<!-- <form action="/logout/" class="form-inline my-2 my-lg-0" method="post">
 				<input class="btn btn-success my-2 my-sm-0" type="submit" value='Log out'>
 			</form> katera koda je boljša??-->
 		</div>
+		% end
 	</nav>
 	<div class="container">
 		{{!base}}

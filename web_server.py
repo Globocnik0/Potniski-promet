@@ -13,10 +13,10 @@ app = bottle.default_app()
 bottle.BaseTemplate.defaults['get_url'] = app.get_url
 
 
-@bottle.route('/webpage/database/<filename:path>', name='database')
-def serve_static_icon(filename):
-    return bottle.static_file(
-        filename, root=os.path.join(os.getcwd(), "database"))
+# @bottle.route('/webpage/database/<filename:path>', name='database')
+# def serve_static_icon(filename):
+#     return bottle.static_file(
+#         filename, root=os.path.join(os.getcwd(), "database"))
 
 @bottle.get('/')
 def redirect():
@@ -27,22 +27,28 @@ def search_get():
     emso = bottle.request.get_cookie('Logged')
     if emso:
         username = informacijeUporabnika(emso)[0]
-        return bottle.template('search_engine.tpl', user = username)
     else:
-        return bottle.template('search_engine.tpl', user = 'fellow passenger')
+        username = False
+    return bottle.template('search_engine.tpl', username = username)
 
 @bottle.post('/search/')
 def search():
+    emso = bottle.request.get_cookie('Logged')
+    if emso:
+        username = informacijeUporabnika(emso)[0]
+    else:
+        username = False
+
     station_1 = bottle.request.forms['station_1']
     station_2 = bottle.request.forms['station_2']
-    return bottle.template('display_traffic.tpl', traffic_data = poisciVozniRed22(station_1, station_2))
+    return bottle.template('display_traffic.tpl', traffic_data = poisciVozniRed22(station_1, station_2), username = username)
 
 
 @bottle.get('/register/')
 def register():
     if bottle.request.get_cookie('Logged'):
         bottle.redirect('/')
-    return bottle.template('register.tpl', alert='')
+    return bottle.template('register.tpl', alert='', username = False)
 
 @bottle.post('/register/')
 def register_post():
@@ -55,18 +61,18 @@ def register_post():
     #first_time_user = bottle.request.forms.first_login
     if re.search("^[A-Za-z0-9]*$", username) and re.search("^[A-Za-z0-9]*$",password):
         if registracijaUporabnika([emso, username, rojstvo, naslov, email, password]): #dodal sm naslov
-            return bottle.template('login.tpl', alert='Now you can also log in')
+            return bottle.template('login.tpl', alert='Now you can also log in', username = False) #a je čudno da na strani register dam template login?
         else:
-            return bottle.template('register.tpl', alert='Your EMŠO or email are already registred')
+            return bottle.template('register.tpl', alert='Your EMŠO or email are already registred', username = False)
     else:
-        return bottle.template('register.tpl', alert='Only permitted characters are A-Z, a-z, 0-9.')
+        return bottle.template('register.tpl', alert='Only permitted characters are A-Z, a-z, 0-9.', username = False)
 
 
 @bottle.get('/login/')
 def login():
     if bottle.request.get_cookie('Logged'):
         bottle.redirect('/')
-    return bottle.template('login.tpl', alert='')
+    return bottle.template('login.tpl', alert='', username = False)
 
 @bottle.post('/login/')
 def login_post():
@@ -77,7 +83,7 @@ def login_post():
         bottle.response.set_cookie('Logged', emso, path = '/')
         bottle.redirect('/')
     else:
-        return bottle.template('login.tpl', alert='Napačen email ali geslo')
+        return bottle.template('login.tpl', alert='Napačen email ali geslo', username = False)
 
 @bottle.get('/logout/')
 def logout():
