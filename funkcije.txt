@@ -93,3 +93,22 @@ CREATE FUNCTION vozniRedZacetnaKoncna(vstopna text, iztopna text) RETURNS TABLE(
                     ORDER BY vr11.cas_odhoda, zaporedna_st;
 ' LANGUAGE SQL;
 
+##################-- PRESTOPANJE --########################
+
+(SELECT pr2.postaja from progekraji pr2
+JOIN (SELECT proga, zaporedna_st from progekraji 
+                            WHERE postaja = 1
+                            GROUP BY proga, zaporedna_st) pr1
+ON pr1.proga = pr2.proga
+WHERE pr2.zaporedna_st > pr1.zaporedna_st)
+
+INTERSECT 
+
+(SELECT pr2.postaja from progekraji pr2
+JOIN (SELECT proga, zaporedna_st from progekraji 
+                            WHERE postaja = 16
+                            GROUP BY proga, zaporedna_st) pr1
+ON pr1.proga = pr2.proga
+WHERE pr2.zaporedna_st < pr1.zaporedna_st)
+
+#vrne prestopne postaje

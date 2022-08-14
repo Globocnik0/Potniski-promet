@@ -11,7 +11,9 @@ proga2 = ["'Izola'", "'Nova_Gorica'", "'Ljubljana'"]
 
 proga3 = ["'Ljubljana'", "'Celje'", "'Kranj'", "'Koper'", "'Kočevje'"]
 
-proge = [proga1, proga2, proga3]
+proga4 = ["'Izola'", "'Jesenice'", "'Kranj'", "'Murska_Sobota'", "'Postojna'"]
+
+proge = [proga1, proga2, proga3, proga4]
 
 imena = ["'Franc'",
 "'Marija'",
