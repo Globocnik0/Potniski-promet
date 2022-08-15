@@ -375,8 +375,115 @@ def vozniRedVGrupah(p1, p2):
         grupe.append(tabela)
     return grupe
 
+def razdaljaMedPostajama(p1, p2):
+    cur.execute("""SELECT id FROM postaja WHERE ime = %s""", [p1])
+    p11 = cur.fetchall()[0][0]
+    cur.execute("""SELECT id FROM postaja WHERE ime = %s""", [p2])
+    p22 = cur.fetchall()[0][0]
+
+
+    cur.execute("""SELECT pk.proga, sum(pk.razdalja) from progekraji pk 
+                    JOIN (SELECT proga, zaporedna_st from progekraji WHERE postaja = %s) pk1 
+                    ON pk1.proga = pk.proga
+                    JOIN (SELECT proga, zaporedna_st from progekraji WHERE postaja = %s) pk2 
+                    ON pk2.proga = pk.proga
+
+                    WHERE pk.proga IN
+                    (SELECT pr2.proga 
+                        FROM progekraji pr2
+                        JOIN
+                            (SELECT proga, zaporedna_st from progekraji 
+                            WHERE postaja = %s
+                            GROUP BY proga, zaporedna_st) pr1
+
+                        ON pr2.proga = pr1.proga
+                        WHERE pr2.postaja = %s AND pr2.zaporedna_st > pr1.zaporedna_st
+                        GROUP BY pr2.proga) 
+                    AND pk.zaporedna_st >= pk1.zaporedna_st
+                    AND pk.zaporedna_st < pk2.zaporedna_st
+                    GROUP BY pk.proga
+                    """, [p11, p22, p11, p22])
+
+    tabela = cur.fetchall()
+    return tabela
+
+def vozniredZRazdaljo(p1, p2):
+    cur.execute("""SELECT id FROM postaja WHERE ime = %s""", [p1])
+    p11 = cur.fetchall()[0][0]
+    cur.execute("""SELECT id FROM postaja WHERE ime = %s""", [p2])
+    p22 = cur.fetchall()[0][0]
+
+    cur.execute("""SELECT po.ime, CAST(vr.cas_odhoda AS TEXT), raz.r FROM voznired vr
+                    JOIN
+                        (SELECT pr2.proga 
+                        FROM progekraji pr2
+                        JOIN
+                            (SELECT proga, zaporedna_st from progekraji 
+                            WHERE postaja = %s
+                            GROUP BY proga, zaporedna_st) pr1
+
+                        ON pr2.proga = pr1.proga
+                        WHERE pr2.postaja = %s AND pr2.zaporedna_st > pr1.zaporedna_st
+                        GROUP BY pr2.proga)  pr
+
+                    ON pr.proga = vr.proga
+
+                JOIN progekraji pk1 ON pk1.proga = vr.proga AND pk1.postaja= vr.postaja
+                JOIN postaja po ON vr.postaja = po.id
+
+                JOIN
+                (
+                SELECT vrr.postaja, vrr.cas_odhoda, vrr.proga, vrr.voznja FROM voznired vrr
+                    JOIN
+                        (SELECT pr22.proga 
+                        FROM progekraji pr22
+                        JOIN
+                            (SELECT proga, zaporedna_st from progekraji 
+                            WHERE postaja = %s
+                            GROUP BY proga, zaporedna_st) pr11
+
+                        ON pr22.proga = pr11.proga
+                        WHERE pr22.postaja = %s AND pr22.zaporedna_st > pr11.zaporedna_st
+                        GROUP BY pr22.proga)  prr
+
+                    ON prr.proga = vrr.proga
+
+                JOIN progekraji pk11 ON pk11.proga = vrr.proga AND pk11.postaja= vrr.postaja
+                WHERE pk11.zaporedna_st >= (SELECT zaporedna_st FROM progekraji pkk WHERE pkk.proga = vrr.proga AND pkk.postaja = %s) 
+                AND pk11.zaporedna_st <= (SELECT zaporedna_st FROM progekraji pkk WHERE pkk.proga = vrr.proga AND pkk.postaja = %s) 
+                AND vrr.postaja = %s) vr11
+                    
+                ON vr11.proga = vr.proga AND vr11.voznja = vr.voznja
+                
+                JOIN (SELECT pk.proga, sum(pk.razdalja) as r from progekraji pk 
+                    JOIN (SELECT proga, zaporedna_st from progekraji WHERE postaja = %s) pk1 
+                    ON pk1.proga = pk.proga
+                    JOIN (SELECT proga, zaporedna_st from progekraji WHERE postaja = %s) pk2 
+                    ON pk2.proga = pk.proga
+
+                    WHERE pk.proga IN
+                    (SELECT pr2.proga 
+                        FROM progekraji pr2
+                        JOIN
+                            (SELECT proga, zaporedna_st from progekraji 
+                            WHERE postaja = %s
+                            GROUP BY proga, zaporedna_st) pr1
+
+                        ON pr2.proga = pr1.proga
+                        WHERE pr2.postaja = %s AND pr2.zaporedna_st > pr1.zaporedna_st
+                        GROUP BY pr2.proga) 
+                    AND pk.zaporedna_st >= pk1.zaporedna_st
+                    AND pk.zaporedna_st < pk2.zaporedna_st
+                    GROUP BY pk.proga) raz
+                ON vr.proga = raz.proga
+
+
+                    WHERE (vr.postaja = %s OR vr.postaja = %s)
+                    ORDER BY vr11.cas_odhoda, zaporedna_st""", [p11, p22, p11, p22, p11, p22, p11, p11, p22, p11, p22, p11, p22])
+    tabela = cur.fetchall()
+    return tabela
 
 #tabela = poisciVozniRed22("Kranj", "Ljubljana")
 #print(tabela)
 #print(tabulate(tabela))
-
+#print(tabulate(vozniredZRazdaljo( "Ljubljana", "Kranj")))

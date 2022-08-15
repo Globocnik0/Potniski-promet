@@ -5,10 +5,11 @@
         </h1>
 
         <table>
-            % for i, (ime, cas) in enumerate(traffic_data):
+            % for i, (ime, cas, razdalja) in enumerate(traffic_data):
             <tr> 
                 % if i%2 == 0:
-                <td>Vstopna postaja: {{ime}} </td> <td>Cas: {{cas}}</td> <td rowspan="2"> <a href='' >Buy ticket</a> </td>
+                <td>Vstopna postaja: {{ime}} </td> <td>Cas: {{cas}}</td>  <td rowspan="2"> <a href='' >Buy ticket</a> </td>
+                <td>Razdalja: {{razdalja}} km </td>
                 % else:
                 <td>Iztopna postaja: {{ime}} </td> <td>Cas: {{cas}}</td>
                 

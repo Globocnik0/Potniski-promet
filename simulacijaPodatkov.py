@@ -115,9 +115,9 @@ def napolniTabeloPregled(cur, stVnosov):
 
 #-----------VOZOVNICA-----------------  
 def napolniTabeloVozovnica(cur):
-    komanda = """INSERT INTO vozovnica(id, ime, cena, velja, opis) values"""
+    komanda = """INSERT INTO vozovnica(id, ime, cas_veljavnost, cena, opis) values"""
     
-    list = np.array([pzg.vozovnicaId ,pzg.vozovnicaIme, pzg.vozovnicaCena, pzg.vozovnicaVelja, pzg.vozovnicaOpis])
+    list = np.array([pzg.vozovnicaId ,pzg.vozovnicaIme, pzg.vozovnicaVelja, pzg.vozovnicaCena, pzg.vozovnicaOpis])
     vnosVozovnice= transponiraj2(list)
 
     for val in vnosVozovnice:
@@ -239,34 +239,41 @@ def napolniTabeloUporabnik(cur, stVnosovPotnik, stVnosovZaposleni):
         komanda += niz
     cur.execute(komanda[:-1])
 
-    
-
-
 #------PROGA------------------
 def napolniTabeloProga(cur):
-    komanda = """INSERT INTO proga(id, seznam_postaj) values"""
+    komanda = """INSERT INTO proga(id, seznam_postaj, razdalje) values"""
     
     pro = []
-    for pr in pzg.proge:
+    razdalje = []
+    for i, pr in enumerate(pzg.proge):
         pro.append(pr[::-1])
-    
+        razdalje.append(pzg.razdalje[i][::-1])    
+    #dodal proge v nasprotno smer
     pzg.proge = pzg.proge + pro
-
+    pzg.razdalje = pzg.razdalje + razdalje
     ids = np.arange(0, len(pzg.proge)) + 1
     progs = []
-    for proga in pzg.proge:
+    razs = []
+    for i, proga in enumerate(pzg.proge):
         pro = []
-        for p in proga:
+        razdalje = []
+        razdalja = pzg.razdalje[i]
+        razdalja.append(0)
+        for j, p in enumerate(proga):
             p = p.replace("'", "")
             pro.append(p)
+            razdalje.append(str(razdalja[j]))
         proStr = ",".join(pro)
+        razStr = ",".join(razdalje)
         progs.append(proStr)
-    llist = np.array([ids, progs])
+        razs.append(razStr)
+    llist = np.array([ids, progs, razs])
     vnosProge = transponiraj2(llist)
     for val in vnosProge:
         id = val[0]
         sezP = val[1]
-        niz = "({}, '{}'),".format(id, sezP)
+        sezRaz = val[2]
+        niz = "({0}, '{1}', '{2}'),".format(id, sezP, sezRaz)
         komanda += niz
     cur.execute(komanda[:-1])
     
@@ -274,17 +281,18 @@ def napolniTabeloProga(cur):
 #----PROGA2------------------
 def napolniTabeloProgeKraji(cur):
     cur.execute("""SELECT * FROM proga""")
-    prIds, prStr = np.transpose(np.array(cur.fetchall()))
-    komanda = """INSERT INTO progeKraji(proga, postaja, zaporedna_st) values"""
+    prIds, prStr, prRaz = np.transpose(np.array(cur.fetchall()))
+    komanda = """INSERT INTO progeKraji(proga, postaja, zaporedna_st, razdalja) values"""
     for i in range(len(prIds)):
         prId = int(prIds[i])
         proga = prStr[i].split(",")
+        razdalja = prRaz[i].split(",")
         for j, p in enumerate(proga):
             cur.execute(""" SELECT id FROM postaja
                             WHERE ime = '{}' """.format(p))
             posIds = cur.fetchall()
             posId = posIds[0][0]
-            niz = "({}, {}, {}),".format(prId, posId, j)
+            niz = "({}, {}, {}, {}),".format(prId, posId, j, int(razdalja[j]))
             komanda += niz
     cur.execute(komanda[:-1])
     

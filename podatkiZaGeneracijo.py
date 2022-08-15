@@ -6,14 +6,19 @@ imenaPostaj = ["'Ljubljana'", "'Celje'", "'Kranj'", "'Koper'",
                     "'Logatec'", "'Vrhnika'", "'Kočevje'"]
 
 proga1 = ["'Ljubljana'", "'Celje'", "'Kranj'", "'Koper'"]
+razdalja1 = [5, 6, 7]
 
 proga2 = ["'Izola'", "'Nova_Gorica'", "'Ljubljana'"]
+razdalja2 = [13, 6]
 
 proga3 = ["'Ljubljana'", "'Celje'", "'Kranj'", "'Koper'", "'Kočevje'"]
+razdalja3 = [5, 7, 7, 8]
 
 proga4 = ["'Izola'", "'Jesenice'", "'Kranj'", "'Murska_Sobota'", "'Postojna'"]
+razdalja4 = [20, 21, 15, 6]
 
 proge = [proga1, proga2, proga3, proga4]
+razdalje = [razdalja1, razdalja2, razdalja3, razdalja4]
 
 imena = ["'Franc'",
 "'Marija'",
@@ -397,11 +402,11 @@ komentarji = ["'Še eno jutro sivo bedno'",
 "'A če pomislim res ne vem a v meni je problem'",
 "'al pa v tem da dans ni dan za samomor'"]
 
-vozovnicaId = [1,2,3,4]
-vozovnicaIme = ["'Letna'", "'Upokojenska'", "'Mesečna'", "'Zaposlena'"]
-vozovnicaCena = [120, 20, 30, 0]
-vozovnicaOpis = ["'Za_bogate'", "'Za_stare'", "'Za_revne'", "'Za_zaposlene'"]
-vozovnicaVelja = [365, 1000000, 30, 1000000]
+vozovnicaId = [1,2,3,4, 5]
+vozovnicaIme = ["'Yearly'", "'Pensioner'", "'Monthly'", "'Student'", "'Dnevna'"]
+vozovnicaCena = [120, 20, 30, 15, 0]
+vozovnicaOpis = ["'Celoletna vozovnica. Velja po celi Sloveniji.'", "'Celoletna vozovnica. Velja po celi Sloveniji.'", "'Mesečna vozovnica. Velja po celi Sloveniji.'", "'Celoletna vozovnica. Velja po celi Sloveniji'", "'Dnevna vozovnica. Cena je odvisna od relacije.'"]
+vozovnicaVelja = [365, 1000000, 30, 365, 1]
 
 
 def randomInt():
