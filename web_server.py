@@ -91,6 +91,25 @@ def logout():
     bottle.redirect('/')
 
 
+@bottle.get('/buy_ticket/<station_1>/<station_2>/<type>/')
+def uporabnik(station_1, station_2, type):
+    emso = bottle.request.get_cookie('Logged')
+    # price = x krat razdalja
+    nakupKarte([emso, station_1, station_2, type, price])
+
+
+@bottle.get('/tickets/')
+def display_tickets():
+    emso = bottle.request.get_cookie('Logged')
+    tickets = informacijeUporabnikaNakupi(emso)
+    print(tickets)
+    if emso:
+        username = informacijeUporabnika(emso)[0]
+        return bottle.template('display_tickets.tpl', username = username, tickets= tickets)
+    else:
+        bottle.redirect('/')
+    
+
 # @bottle.get('/uporabnik/<emso>/')
 # def uporabnik(emso):
 #     return "Čestitam za prijavo {0}".format(emso)
