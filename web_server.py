@@ -41,7 +41,7 @@ def search():
 
     station_1 = bottle.request.forms['station_1']
     station_2 = bottle.request.forms['station_2']
-    return bottle.template('display_traffic.tpl', traffic_data = poisciVozniRed22(station_1, station_2), username = username)
+    return bottle.template('display_traffic.tpl', traffic_data = vozniredZRazdaljo(station_1, station_2), username = username)
 
 
 @bottle.get('/register/')

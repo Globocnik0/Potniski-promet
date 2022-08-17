@@ -63,9 +63,10 @@ def ustvariTabeloPregled():
 def ustvariTabeloVozovnica():
     komanda = """
     CREATE TABLE vozovnica(
-        ime TEXT PRIMARY KEY,
+        id INTEGER PRIMARY KEY,
+        ime TEXT,
         cas_veljavnost INT NOT NULL,
-        cena FLOAT NOT NULL,
+        cena FLOAT,
         opis TEXT
         )
     """
@@ -103,18 +104,6 @@ def ustvariTabeloUporabnik():
     cur.execute(komanda)
     conn.commit()
 
-def ustvariTabeloVozovnica():
-    komanda = """
-    CREATE TABLE vozovnica(
-        id INTEGER PRIMARY KEY, 
-        ime TEXT NOT NULL,
-        cena FLOAT NOT NULL,
-        velja INT NOT NULL,
-        opis TEXT)
-    """
-    cur.execute(komanda)
-    conn.commit()
-
 def ustvariTabeloPostaja():
     komanda = """
     CREATE TABLE postaja(
@@ -143,7 +132,8 @@ def ustvariTabeloProga():
     komanda = """
     CREATE TABLE proga(
         id INTEGER PRIMARY KEY,
-        seznam_postaj TEXT NOT NULL
+        seznam_postaj TEXT NOT NULL,
+        razdalje TEXT
         )
     """
     cur.execute(komanda)
@@ -171,6 +161,7 @@ def ustvariTabeloProgeKraji():
                 proga INTEGER,
                 postaja INTEGER,
                 zaporedna_st INTEGER,
+                razdalja INT,
                 PRIMARY KEY(proga, postaja)
                 )
     """
@@ -192,7 +183,6 @@ def ustvariTabeloKupljeneKarte():
     """
     cur.execute(komanda)
     conn.commit()
-
 
 def zbrisiTabelo(cur, ImeTabele):
     komanda = """
