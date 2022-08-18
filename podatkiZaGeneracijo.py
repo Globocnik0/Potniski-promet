@@ -5,20 +5,25 @@ imenaPostaj = ["'Ljubljana'", "'Celje'", "'Kranj'", "'Koper'",
                     "'Škofja_Loka'", "'Izola'", "'Murska_Sobota'", "'Postojna'", 
                     "'Logatec'", "'Vrhnika'", "'Kočevje'"]
 
-proga1 = ["'Ljubljana'", "'Celje'", "'Kranj'", "'Koper'"]
-razdalja1 = [5, 6, 7]
+proga1 = ["'Jesenice'", "'Kranj'", "'Škofja_Loka'", "'Ljubljana'"]
+razdalja1 = [35, 12, 23]
 
-proga2 = ["'Izola'", "'Nova_Gorica'", "'Ljubljana'"]
-razdalja2 = [13, 6]
+proga2 = ["'Koper'", "'Postojna'", "'Logatec'","'Vrhnika'", "'Ljubljana'"]
+razdalja2 = [60, 27,10,32]
 
-proga3 = ["'Ljubljana'", "'Celje'", "'Kranj'", "'Koper'", "'Kočevje'"]
+proga3 = ["'Murska_Sobota'", "'Ptuj'", "'Celje'", "'Trbovlje'", "'Ljubljana'"]
 razdalja3 = [5, 7, 7, 8]
 
-proga4 = ["'Izola'", "'Jesenice'", "'Kranj'", "'Murska_Sobota'", "'Postojna'"]
-razdalja4 = [20, 21, 15, 6]
+proga4 = ["'Domžale'", "'Kočevje'", "'Novo_mesto'", "'Ljubljana'"]
+razdalja4 = [75, 47, 70]
 
-proge = [proga1, proga2, proga3, proga4]
-razdalje = [razdalja1, razdalja2, razdalja3, razdalja4]
+proga5 = ["'Velenje'", "'Kamnik'", "'Ljubljana'", "'Nova_Gorica'", "'Izola'"]
+razdalja5 = [57, 23, 106, 81]
+
+
+
+proge = [proga1, proga2, proga3, proga4, proga5]
+razdalje = [razdalja1, razdalja2, razdalja3, razdalja4, razdalja5]
 
 imena = ["'Franc'",
 "'Marija'",
