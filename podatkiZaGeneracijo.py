@@ -411,7 +411,7 @@ vozovnicaId = [1,2,3,4, 5]
 vozovnicaIme = ["'Yearly'", "'Pensioner'", "'Monthly'", "'Student'", "'Dnevna'"]
 vozovnicaCena = [120, 20, 30, 15, 0]
 vozovnicaOpis = ["'Celoletna vozovnica. Velja po celi Sloveniji.'", "'Celoletna vozovnica. Velja po celi Sloveniji.'", "'Mesečna vozovnica. Velja po celi Sloveniji.'", "'Celoletna vozovnica. Velja po celi Sloveniji'", "'Dnevna vozovnica. Cena je odvisna od relacije.'"]
-vozovnicaVelja = [365, 1000000, 30, 365, 1]
+vozovnicaVelja = [365, 1000000, 30, 365, 0]
 
 
 def randomInt():

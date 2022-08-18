@@ -82,8 +82,13 @@ def informacijeUporabnika(emso):
     return podatki[0]
 
 def informacijeUporabnikaNakupi(emso):
-    cur.execute("""SELECT opis, datum_nakupa, datumveljavnosti, vstopnapostaja, iztopnapostaja, kk.velja FROM kupljenekarte kk
+
+
+
+    cur.execute("""SELECT opis, datum_nakupa, datumveljavnosti, p1.ime, p2.ime, kk.velja FROM kupljenekarte kk
                     JOIN vozovnica v on v.id = kk.vrstakarte
+JOIN postaja p1 on p1.id = kk.vstopnapostaja
+JOIN postaja p2 on p2.id = kk.iztopnapostaja
                     WHERE kk.uporabnik = %s""", [emso])
     podatki = cur.fetchall()
     return podatki #vrne opis karte, datum nakupa, datumveljavnosti, vstopnapostaja, iztopnapostaja, velja(boolean)
