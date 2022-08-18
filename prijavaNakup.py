@@ -48,9 +48,9 @@ def nakupKarte(podatki): #[emso, vpostaja, ipostaja, vrsta Karte, cena]
     cur.execute("""SELECT cas_veljavnost FROM vozovnica WHERE id = {} """.format(vrsta))
     velja = cur.fetchall()[0][0]
     #vpostajaStr = """"""
-    cur.execute(""" INSERT INTO kupljeneKarte (uporabnik, vrstakarte, datum_nakupa, datumveljavnosti, vstopnaPostaja, iztopnaPostaja, cena)
-                    values(%s, %s, (SELECT CURRENT_DATE), (SELECT (SELECT CURRENT_DATE + INTERVAL '%s day')::TIMESTAMP::DATE), %s,%s,%s)
-                    """, [emso, vrsta, velja, p1, p2, cena])
+    cur.execute(""" INSERT INTO kupljeneKarte (uporabnik, vrstakarte, datum_nakupa, datumveljavnosti, vstopnaPostaja, iztopnaPostaja, cena, velja)
+                    values(%s, %s, (SELECT CURRENT_DATE), (SELECT (SELECT CURRENT_DATE + INTERVAL '%s day')::TIMESTAMP::DATE), %s,%s,%s, %s)
+                    """, [emso, vrsta, velja, p1, p2, cena, 1])
     conn.commit()
 
 # nakupKarte(["1835012", 1])
@@ -77,18 +77,27 @@ def dobiEmso(mail):
     return podatki[0][0]
 
 def informacijeUporabnika(emso):
+    
+
     cur.execute("""SELECT ime, rojstvo, naslov, mail FROM uporabnik WHERE emso = %s """, [emso])
     podatki = cur.fetchall()
     return podatki[0]
 
 def informacijeUporabnikaNakupi(emso):
+    cur.execute("""UPDATE kupljenekarte 
+                    SET velja = 0
+                    WHERE id in 
 
+                    (select id from kupljenekarte 
+                    join (SELECT CURRENT_DATE as cd) cd on 1=1
+                    where uporabnik = %s
+                    AND cd.cd > datumveljavnosti)""", [emso])
 
-
+    conn.commit()
     cur.execute("""SELECT opis, datum_nakupa, datumveljavnosti, p1.ime, p2.ime, kk.velja FROM kupljenekarte kk
                     JOIN vozovnica v on v.id = kk.vrstakarte
-JOIN postaja p1 on p1.id = kk.vstopnapostaja
-JOIN postaja p2 on p2.id = kk.iztopnapostaja
+                    JOIN postaja p1 on p1.id = kk.vstopnapostaja
+                    JOIN postaja p2 on p2.id = kk.iztopnapostaja
                     WHERE kk.uporabnik = %s""", [emso])
     podatki = cur.fetchall()
     return podatki #vrne opis karte, datum nakupa, datumveljavnosti, vstopnapostaja, iztopnapostaja, velja(boolean)
