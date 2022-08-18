@@ -105,7 +105,6 @@ def display_tickets():
     emso = bottle.request.get_cookie('Logged')
     if emso:
         tickets = informacijeUporabnikaNakupi(emso)
-        print(tickets)
         username = informacijeUporabnika(emso)[0]
         return bottle.template('display_tickets.tpl', username = username, tickets= tickets)
     else:
