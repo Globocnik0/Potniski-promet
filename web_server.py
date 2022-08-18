@@ -97,7 +97,6 @@ def uporabnik(station_1, station_2, type):
     razdalja = vozniredZRazdaljo(station_1, station_2) #treba nekak izračunat ceno
     price = 2
     nakupKarte([emso, station_1, station_2, type, price])
-    print('vstopnica nakupljena')
     bottle.redirect('/tickets/')
 
 

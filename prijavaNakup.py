@@ -86,7 +86,7 @@ def informacijeUporabnikaNakupi(emso):
                     JOIN vozovnica v on v.id = kk.vrstakarte
                     WHERE kk.uporabnik = %s""", [emso])
     podatki = cur.fetchall()
-    return podatki #vrne opis karte, datum nakupa, datumveljavnosti, vstopnapostaja, iztopnapostaja, velja(boolean)
+    return podatki #vrne opis karte, datum nakupa, datumveljavnosti, vstopnapostaja, iztopnapostaja, veljavnost karte(boolean)
 
 
 #podatki = ["8", "Alex", "08-08-2022", "Britof", "abcd@mail", "123123"]
