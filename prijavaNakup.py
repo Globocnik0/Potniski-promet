@@ -39,7 +39,7 @@ def nakupKarte(podatki): #[emso, vpostaja, ipostaja, vrsta Karte, cena]
     ipostaja = podatki[2]
     vrsta = podatki[3]
     cena = podatki[4]
-    cur.execute("""SELECT cas_veljavnosti FROM vozovnica WHERE id = {} """.format(vrsta))
+    cur.execute("""SELECT cas_veljavnost FROM vozovnica WHERE id = {} """.format(vrsta))
     velja = cur.fetchall()[0][0]
     cur.execute(""" INSERT INTO kupljeneKarte (uporabnik, vrstakarte, datum_nakupa, datumveljavnosti, vstopnaPostaja, iztopnaPostaja, cena)
                     values(%s, %s, (SELECT CURRENT_DATE), (SELECT (SELECT CURRENT_DATE + INTERVAL '%s day')::TIMESTAMP::DATE), %s,%s,%s)
@@ -86,7 +86,7 @@ def informacijeUporabnikaNakupi(emso):
 #print(registracijaUporabnika(podatki))
 #print(informacijeUporabnika("0000"))
 #print(dobiEmso("nekej@asd"))
-# podatkiNakupKarte = ["8", None, None, 1, 102] #[emso, vpostaja, ipostaja, vrsta Karte, cena]
+# podatkiNakupKarte = ["8", None, None, 3, 102] #[emso, vpostaja, ipostaja, vrsta Karte, cena]
 # nakupKarte(podatkiNakupKarte)
 # print(informacijeUporabnikaNakupi("8"))
 #print(informacijeKart())
