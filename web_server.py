@@ -41,7 +41,11 @@ def search():
 
     station_1 = bottle.request.forms['station_1']
     station_2 = bottle.request.forms['station_2']
-    return bottle.template('display_traffic.tpl', traffic_data = vozniredZRazdaljo(station_1, station_2), username = username)
+    try:
+        traffic_data = vozniredZRazdaljo(station_1, station_2)
+    except:
+        traffic_data = []
+    return bottle.template('display_traffic.tpl', traffic_data = traffic_data, username = username)
 
 
 @bottle.get('/register/')
@@ -91,14 +95,6 @@ def logout():
     bottle.redirect('/')
 
 
-@bottle.get('/buy_ticket/<station_1>/<station_2>/<type>/')
-def uporabnik(station_1, station_2, type):
-    emso = bottle.request.get_cookie('Logged')
-    razdalja = vozniredZRazdaljo(station_1, station_2) #treba nekak izračunat ceno
-    price = 2
-    nakupKarte([emso, station_1, station_2, type, price])
-    bottle.redirect('/tickets/')
-
 @bottle.get('/ticket_preview/<station_1>/<station_2>/<type>/')
 def preview_ticket(station_1, station_2, type):
     emso = bottle.request.get_cookie('Logged')
@@ -126,7 +122,29 @@ def preview_ticket(station_1, station_2, type):
     price = vozniredZRazdaljo(station_1, station_2)[0][2] * 0.1 * faktor_cene # 5 centov na kilometer
     return bottle.template('ticket_preview.tpl', username = username, station_1 = station_1, station_2 = station_2, ticket_type = ticket_type, type = type, price = price)
 
+@bottle.get('/buy_ticket/<station_1>/<station_2>/<type>/')
+def uporabnik(station_1, station_2, type):
+    emso = bottle.request.get_cookie('Logged')
+    
+    if int(type) == 5:
+        ticket_type = 'Daily ticket'
+        faktor_cene = 1
+    elif int(type) == 4:
+        ticket_type = 'Student monthly ticket'
+        faktor_cene = 20
+    elif int(type) == 3:
+        ticket_type = 'Monthly ticket'
+        faktor_cene = 25
+    elif int(type) == 2:
+        ticket_type = 'Pensioner monthly ticket'
+        faktor_cene = 0
+    elif int(type) == 1:
+        ticket_type = 'Yearly ticket'
+        faktor_cene = 280
 
+    price = vozniredZRazdaljo(station_1, station_2)[0][2] * 0.1 * faktor_cene # 5 centov na kilometer
+    nakupKarte([emso, station_1, station_2, type, price])
+    bottle.redirect('/tickets/')
 
 @bottle.get('/tickets/')
 def display_tickets():
