@@ -97,7 +97,6 @@ def uporabnik(station_1, station_2, type):
     razdalja = vozniredZRazdaljo(station_1, station_2) #treba nekak izračunat ceno
     price = 2
     nakupKarte([emso, station_1, station_2, type, price])
-    print('vstopnica nakupljena')
     bottle.redirect('/tickets/')
 
 
@@ -106,7 +105,6 @@ def display_tickets():
     emso = bottle.request.get_cookie('Logged')
     if emso:
         tickets = informacijeUporabnikaNakupi(emso)
-        print(tickets)
         username = informacijeUporabnika(emso)[0]
         return bottle.template('display_tickets.tpl', username = username, tickets= tickets)
     else:
