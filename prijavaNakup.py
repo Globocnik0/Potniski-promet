@@ -94,13 +94,13 @@ def informacijeUporabnikaNakupi(emso):
                     AND cd.cd > datumveljavnosti)""", [emso])
 
     conn.commit()
-    cur.execute("""SELECT opis, datum_nakupa, datumveljavnosti, p1.ime, p2.ime, kk.velja FROM kupljenekarte kk
+    cur.execute("""SELECT opis, CAST(datum_nakupa AS TEXT), CAST(datumveljavnosti AS TEXT), p1.ime, p2.ime, kk.cena, kk.velja FROM kupljenekarte kk
                     JOIN vozovnica v on v.id = kk.vrstakarte
                     JOIN postaja p1 on p1.id = kk.vstopnapostaja
                     JOIN postaja p2 on p2.id = kk.iztopnapostaja
                     WHERE kk.uporabnik = %s""", [emso])
     podatki = cur.fetchall()
-    return podatki #vrne opis karte, datum nakupa, datumveljavnosti, vstopnapostaja, iztopnapostaja, velja(boolean)
+    return podatki #vrne opis karte, datum nakupa, datumveljavnosti, vstopnapostaja, iztopnapostaja velja(boolean)
 
 
 #podatki = ["8", "Alex", "08-08-2022", "Britof", "abcd@mail", "123123"]

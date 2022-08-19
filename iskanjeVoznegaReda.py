@@ -412,7 +412,6 @@ def vozniredZRazdaljo(p1, p2):
     p11 = cur.fetchall()[0][0]
     cur.execute("""SELECT id FROM postaja WHERE ime = %s""", [p2])
     p22 = cur.fetchall()[0][0]
-
     cur.execute("""SELECT po.ime, CAST(vr.cas_odhoda AS TEXT), raz.r FROM voznired vr
                     JOIN
                         (SELECT pr2.proga 
@@ -483,7 +482,28 @@ def vozniredZRazdaljo(p1, p2):
     tabela = cur.fetchall()
     return tabela
 
+def vozniRedPrestop(p1, p2): # vrne Vstopna, cas odhoda, prestopna, cas prihoda, razdalja1, cas odhoda, iztopna, cas prihoda, razdalja2
+    cur.execute("""SELECT id FROM postaja WHERE ime = %s""", [p1])
+    p11 = cur.fetchall()[0][0]
+    cur.execute("""SELECT id FROM postaja WHERE ime = %s""", [p2])
+    p22 = cur.fetchall()[0][0]
+
+    cur.execute("""
+                SELECT (SELECT ime from postaja where id=%s), vr1.cas_odhoda c1,  (SELECT ime from postaja where id=vmesnaPostaja(%s, %s)) vmesna, tab1.c2 c2, tab1.r1 razdalja1, tab1.c3 c3, (SELECT ime from postaja where id=%s) koncna, vr2.cas_prihoda, tab1.r2 razdalja2 from 
+                (SELECT v1.proga p1, v1.voznja v1, v1.cas c2, v1.radalja r1, MIN(v2.cas) c3, v2.proga p2, v2.radalja r2 from vozniRedZacetnaKoncnaRazdalje(%s, vmesnaPostaja(%s, %s)) v1
+                CROSS JOIN (SELECT * from vozniRedZacetnaKoncnaRazdalje(vmesnaPostaja(%s, %s), %s) vp2
+                WHERE vp2.ime = vmesnaPostaja(%s, %s)) v2
+                WHERE v1.ime = vmesnaPostaja(%s, %s)
+                AND v1.cas < v2.cas
+                GROUP BY v1.cas, v1.proga, v1.voznja, v1.radalja, v2.proga, v2.radalja) tab1
+
+                JOIN voznired vr1 ON vr1.proga = tab1.p1 AND vr1.voznja = tab1.v1 AND vr1.postaja = %s
+                JOIN voznired vr2 ON vr2.proga = tab1.p2 AND vr2.voznja = (SELECT voznja FROM voznired v WHERE v.proga = tab1.p2 AND v.cas_odhoda = tab1.c3) AND vr2.postaja = %s
+                ORDER BY vr1.cas_odhoda""", [p11, p11, p22, p22, p11, p11, p22, p11, p22, p22, p11, p22, p11, p22, p11, p22])
+    tabela = cur.fetchall()
+    return tabela
 #tabela = poisciVozniRed22("Kranj", "Ljubljana")
 #print(tabela)
 #print(tabulate(tabela))
-#print(tabulate(vozniredZRazdaljo( "Ljubljana", "Kranj")))
+# print(tabulate(vozniredZRazdaljo( "Jesenice", "Ljubljana")))
+print(tabulate(vozniRedPrestop("Koper", "Domžale")))

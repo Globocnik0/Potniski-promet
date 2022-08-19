@@ -346,6 +346,8 @@ def napolniTabeloVozniRed(cur):
             pavzaMin = random.randint(0,20)
             t += pavzaMin
             uraOdhod = cas.Cas.minVCas(t)
+            if (j+1)%len(postaje) == 0:
+                uraOdhod = uraPrihod
             casis2.append(uraOdhod)
             voznjas.append(vz)           
             vozniks.append(voz)
