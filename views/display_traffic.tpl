@@ -9,17 +9,17 @@
         % for i, (ime, cas, razdalja) in enumerate(traffic_data):
         <tr> 
             % if i%2 == 0:
-            <td>Start: {{ime}} </td> <td>Time: {{cas}}</td> <td rowspan="2"> <a href='/buy_ticket/{{station_1}}/{{station_2}}/5/' >Buy ticket</a> </td> <td rowspan="2">Distance: {{razdalja}} km </td>
+            <td>Start: {{ime}} </td> <td>Time: {{cas}}</td> <td rowspan="2"> <a href='/ticket_preview/{{station_1}}/{{station_2}}/5/' >Preview Ticket</a> </td> <td rowspan="2">Distance: {{razdalja}} km </td>
             % else:
             <td>Stop: {{ime}} </td> <td>Time: {{cas}}</td>
             % end
         </tr>
         % end
     </table>
-    <a href='/buy_ticket/{{station_1}}/{{station_2}}/4/' >Buy student mothly ticket for this relation</a>
-    <a href='/buy_ticket/{{station_1}}/{{station_2}}/3/' >Buy mothly ticket for this relation</a>
-    <a href='/buy_ticket/{{station_1}}/{{station_2}}/2/' >Buy pensioner monthly ticket for this relation</a>
-    <a href='/buy_ticket/{{station_1}}/{{station_2}}/1/' >Buy yearly ticket for this relation</a>   
+    <a href='/ticket_preview/{{station_1}}/{{station_2}}/4/' >Preview student mothly ticket for this relation</a>
+    <a href='/ticket_preview/{{station_1}}/{{station_2}}/3/' >Preview mothly ticket for this relation</a>
+    <a href='/ticket_preview/{{station_1}}/{{station_2}}/2/' >Preview pensioner monthly ticket for this relation</a>
+    <a href='/ticket_preview/{{station_1}}/{{station_2}}/1/' >Preview yearly ticket for this relation</a>   
     
     
 

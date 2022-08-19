@@ -6,7 +6,6 @@
 
         <table>
             % for i, ticket in enumerate(tickets):
-                % print(ticket)
                 % if ticket[5] == 1:
                 % validity = 'checked'
                 % else:

@@ -99,6 +99,34 @@ def uporabnik(station_1, station_2, type):
     nakupKarte([emso, station_1, station_2, type, price])
     bottle.redirect('/tickets/')
 
+@bottle.get('/ticket_preview/<station_1>/<station_2>/<type>/')
+def preview_ticket(station_1, station_2, type):
+    emso = bottle.request.get_cookie('Logged')
+    print(type)
+    if emso:
+        username = informacijeUporabnika(emso)[0]
+    else:
+        bottle.redirect('/')
+    if int(type) == 5:
+        ticket_type = 'Daily ticket'
+        faktor_cene = 1
+    elif int(type) == 4:
+        ticket_type = 'Student monthly ticket'
+        faktor_cene = 20
+    elif int(type) == 3:
+        ticket_type = 'Monthly ticket'
+        faktor_cene = 25
+    elif int(type) == 2:
+        ticket_type = 'Pensioner monthly ticket'
+        faktor_cene = 0
+    elif int(type) == 1:
+        ticket_type = 'Yearly ticket'
+        faktor_cene = 280
+
+    price = vozniredZRazdaljo(station_1, station_2)[0][2] * 0.1 * faktor_cene # 5 centov na kilometer
+    return bottle.template('ticket_preview.tpl', username = username, station_1 = station_1, station_2 = station_2, ticket_type = ticket_type, type = type, price = price)
+
+
 
 @bottle.get('/tickets/')
 def display_tickets():
@@ -111,8 +139,5 @@ def display_tickets():
         bottle.redirect('/')
     
 
-# @bottle.get('/uporabnik/<emso>/')
-# def uporabnik(emso):
-#     return "Čestitam za prijavo {0}".format(emso)
 
 bottle.run(debug=True, reloader=True, host = "localhost", port = 8081) #dodal port pa localhost ker nevem koko točn to dela
