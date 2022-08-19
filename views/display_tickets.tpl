@@ -6,13 +6,13 @@
 
         <table>
             % for i, ticket in enumerate(tickets):
-                % if ticket[5] == 1:
+                % if ticket[6] == 1:
                 % validity = 'checked'
                 % else:
                 % validity = 'unchecked'
                 % end
             <tr> 
-                <td>{{ticket[0]}} </td> <td>Purchase time: {{ticket[1]}}</td> <td>Valid until: {{ticket[2]}}</td> <td>Start: {{ticket[3]}} </td> <td>Stop: {{ticket[4]}} </td> <td><input type="checkbox" {{validity}} disabled></td>
+                <td>{{ticket[0]}} </td> <td>Purchase time: {{ticket[1]}}</td> <td>Valid until: {{ticket[2]}}</td> <td>Start: {{ticket[3]}} </td> <td>Stop: {{ticket[4]}} </td> <td>Ticket price: {{ticket[5]}}</td> <td><input type="checkbox" {{validity}} disabled></td>
                 
             </tr>
             % end

@@ -98,7 +98,6 @@ def logout():
 @bottle.get('/ticket_preview/<station_1>/<station_2>/<type>/')
 def preview_ticket(station_1, station_2, type):
     emso = bottle.request.get_cookie('Logged')
-    print(type)
     if emso:
         username = informacijeUporabnika(emso)[0]
     else:
@@ -151,6 +150,7 @@ def display_tickets():
     emso = bottle.request.get_cookie('Logged')
     if emso:
         tickets = informacijeUporabnikaNakupi(emso)
+        print(tickets)
         username = informacijeUporabnika(emso)[0]
         return bottle.template('display_tickets.tpl', username = username, tickets= tickets)
     else:
