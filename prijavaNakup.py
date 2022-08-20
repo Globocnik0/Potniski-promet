@@ -99,7 +99,8 @@ def informacijeUporabnikaNakupi(emso):
                     JOIN vozovnica v on v.id = kk.vrstakarte
                     JOIN postaja p1 on p1.id = kk.vstopnapostaja
                     JOIN postaja p2 on p2.id = kk.iztopnapostaja
-                    WHERE kk.uporabnik = %s""", [emso])
+                    WHERE kk.uporabnik = %s
+                    ORDER BY datum_nakupa DESC""", [emso])
     podatki = cur.fetchall()
     return podatki #vrne opis karte, datum nakupa, datumveljavnosti, vstopnapostaja, iztopnapostaja velja(boolean)
 

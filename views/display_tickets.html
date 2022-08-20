@@ -12,8 +12,32 @@
                 % validity = 'unchecked'
                 % end
             <tr> 
-                <td>{{ticket[0]}} </td> <td>Purchase time: {{ticket[1]}}</td> <td>Valid until: {{ticket[2]}}</td> <td>Start: {{ticket[3]}} </td> <td>Stop: {{ticket[4]}} </td> <td>Ticket price: {{ticket[5]}}</td> <td><input type="checkbox" {{validity}} disabled></td>
+                <td>{{ticket[0]}} </td>      
                 
+            </tr>
+            <tr>
+                <td>Purchase time: {{ticket[1]}}</td>
+            </tr>
+            <tr>
+                <td>Valid until: {{ticket[2]}}</td>
+            </tr>
+            <tr>
+                <td>Start: {{ticket[3]}} </td>
+            </tr>
+            <tr>
+                <td>Stop: {{ticket[4]}} </td>
+            </tr>
+            <tr>
+                
+            </tr>
+            <tr>
+                <td>Ticket price: {{ticket[5]}}€</td>
+            </tr>
+            <tr>
+                <td>Veljavna: <input type="checkbox" {{validity}} disabled></td>
+            </tr>
+            <tr>
+                <td bgcolor="#FFFFFF" style="line-height:10px;" colspan=3>&nbsp;</td>
             </tr>
             % end
         </table>
