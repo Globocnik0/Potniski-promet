@@ -24,7 +24,7 @@ def registracijaUporabnika(podatki): #podatki so [emso, ime, rojstvo, naslov, ma
         return False
 
     print('registriran')
-    cur.execute("""INSERT INTO uporabnik(emso, ime, rojstvo, naslov, mail, geslo) values (%s, %s, %s, %s, %s, %s)""", podatki)
+    cur.execute("""INSERT INTO uporabnik(emso, ime, rojstvo, naslov, mail, geslo, stevilo_vozenj, stevilo_km) values (%s, %s, %s, %s, %s, %s, 0, 0)""", podatki)
     conn.commit()
     return True
 
@@ -104,6 +104,10 @@ def informacijeUporabnikaNakupi(emso):
     podatki = cur.fetchall()
     return podatki #vrne opis karte, datum nakupa, datumveljavnosti, vstopnapostaja, iztopnapostaja velja(boolean)
 
+def zamenjajGeslo(emso, geslo):
+    cur.execute("""UPDATE uporabnik SET geslo = %s WHERE emso = %s""", [geslo, emso])
+    conn.commit()
+
 
 #podatki = ["8", "Alex", "08-08-2022", "Britof", "abcd@mail", "123123"]
 #print(registracijaUporabnika(podatki))
@@ -113,3 +117,4 @@ def informacijeUporabnikaNakupi(emso):
 # nakupKarte(podatkiNakupKarte)
 # print(informacijeUporabnikaNakupi("8"))
 #print(informacijeKart())
+#zamenjajGeslo("8", "aaaaaa")

@@ -159,6 +159,15 @@ def display_tickets():
     else:
         bottle.redirect('/')
     
-
+@bottle.get('/profile/')
+def display_profile():
+    emso = bottle.request.get_cookie('Logged')
+    if emso:
+        info = informacijeUporabnika(emso)
+        
+        username = info[0]
+        return bottle.template('profil.html', username = username, info = info)
+    else:
+        bottle.redirect('/login/')
 
 bottle.run(debug=True, reloader=True, host = "localhost", port = 8081) #dodal port pa localhost ker nevem koko točn to dela
