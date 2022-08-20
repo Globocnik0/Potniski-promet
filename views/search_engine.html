@@ -1,4 +1,4 @@
-%rebase("base.tpl")
+%rebase("base.html")
 
         <h1 style="color:rgb(59, 182, 110);">
             % if username:
@@ -76,3 +76,6 @@
                 </div>
             </div>
         </center>
+
+        % if username:
+            <h4>You can check your tickets </td> <td><a href='/tickets/' >here</a></td>. </h4>

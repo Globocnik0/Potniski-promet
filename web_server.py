@@ -29,7 +29,7 @@ def search_get():
         username = informacijeUporabnika(emso)[0]
     else:
         username = False
-    return bottle.template('search_engine.tpl', username = username)
+    return bottle.template('search_engine.html', username = username)
 
 @bottle.post('/search/')
 def search():
@@ -41,18 +41,20 @@ def search():
 
     station_1 = bottle.request.forms['station_1']
     station_2 = bottle.request.forms['station_2']
-    try:
-        traffic_data = vozniredZRazdaljo(station_1, station_2)
-    except:
-        traffic_data = []
-    return bottle.template('display_traffic.tpl', traffic_data = traffic_data, username = username)
+    traffic_data = vozniredZRazdaljo(station_1, station_2)
+    print(traffic_data)
+    prestop = False
+    if traffic_data == []:
+        traffic_data = vozniRedPrestop(station_1, station_2)
+        prestop = True
+    return bottle.template('display_traffic.html', traffic_data = traffic_data, username = username, prestop = prestop)
 
 
 @bottle.get('/register/')
 def register():
     if bottle.request.get_cookie('Logged'):
         bottle.redirect('/')
-    return bottle.template('register.tpl', alert='', username = False)
+    return bottle.template('register.html', alert='', username = False)
 
 @bottle.post('/register/')
 def register_post():
@@ -65,18 +67,18 @@ def register_post():
     #first_time_user = bottle.request.forms.first_login
     if re.search("^[A-Za-z0-9]*$", username) and re.search("^[A-Za-z0-9]*$",password):
         if registracijaUporabnika([emso, username, rojstvo, naslov, email, password]): #dodal sm naslov
-            return bottle.template('login.tpl', alert='Now you can also log in', username = False) #a je čudno da na strani register dam template login?
+            return bottle.template('login.html', alert='Now you can also log in', username = False) #a je čudno da na strani register dam template login?
         else:
-            return bottle.template('register.tpl', alert='Your EMŠO or email are already registred', username = False)
+            return bottle.template('register.html', alert='Your EMŠO or email are already registred', username = False)
     else:
-        return bottle.template('register.tpl', alert='Only permitted characters are A-Z, a-z, 0-9.', username = False)
+        return bottle.template('register.html', alert='Only permitted characters are A-Z, a-z, 0-9.', username = False)
 
 
 @bottle.get('/login/')
 def login():
     if bottle.request.get_cookie('Logged'):
         bottle.redirect('/')
-    return bottle.template('login.tpl', alert='', username = False)
+    return bottle.template('login.html', alert='', username = False)
 
 @bottle.post('/login/')
 def login_post():
@@ -87,7 +89,7 @@ def login_post():
         bottle.response.set_cookie('Logged', emso, path = '/')
         bottle.redirect('/')
     else:
-        return bottle.template('login.tpl', alert='Napačen email ali geslo', username = False)
+        return bottle.template('login.html', alert='Napačen email ali geslo', username = False)
 
 @bottle.get('/logout/')
 def logout():
@@ -101,7 +103,7 @@ def preview_ticket(station_1, station_2, type):
     if emso:
         username = informacijeUporabnika(emso)[0]
     else:
-        bottle.redirect('/')
+        bottle.redirect('/login/')
     if int(type) == 5:
         ticket_type = 'Daily ticket'
         faktor_cene = 1
@@ -118,8 +120,9 @@ def preview_ticket(station_1, station_2, type):
         ticket_type = 'Yearly ticket'
         faktor_cene = 280
 
-    price = vozniredZRazdaljo(station_1, station_2)[0][2] * 0.1 * faktor_cene # 5 centov na kilometer
-    return bottle.template('ticket_preview.tpl', username = username, station_1 = station_1, station_2 = station_2, ticket_type = ticket_type, type = type, price = price)
+    velja_do = informacijeKart(type)[0][-1]
+    price = razdaljaMedPostajama(station_1, station_2) * 0.1 * faktor_cene # 5 centov na kilometer
+    return bottle.template('ticket_preview.html', username = username, station_1 = station_1, station_2 = station_2, ticket_type = ticket_type, type = type, price = price, velja_do = velja_do)
 
 @bottle.get('/buy_ticket/<station_1>/<station_2>/<type>/')
 def uporabnik(station_1, station_2, type):
@@ -141,7 +144,7 @@ def uporabnik(station_1, station_2, type):
         ticket_type = 'Yearly ticket'
         faktor_cene = 280
 
-    price = vozniredZRazdaljo(station_1, station_2)[0][2] * 0.1 * faktor_cene # 5 centov na kilometer
+    price = razdaljaMedPostajama(station_1, station_2) * 0.1 * faktor_cene # 5 centov na kilometer
     nakupKarte([emso, station_1, station_2, type, price])
     bottle.redirect('/tickets/')
 
@@ -152,7 +155,7 @@ def display_tickets():
         tickets = informacijeUporabnikaNakupi(emso)
         print(tickets)
         username = informacijeUporabnika(emso)[0]
-        return bottle.template('display_tickets.tpl', username = username, tickets= tickets)
+        return bottle.template('display_tickets.html', username = username, tickets= tickets)
     else:
         bottle.redirect('/')
     

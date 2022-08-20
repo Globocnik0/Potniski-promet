@@ -405,7 +405,14 @@ def razdaljaMedPostajama(p1, p2):
                     """, [p11, p22, p11, p22])
 
     tabela = cur.fetchall()
-    return tabela
+    if tabela != []:
+        razdalja = tabela[0][1]
+    elif tabela == []:
+        cur.execute("""SELECT * from razdalja(%s, vmesnaPostaja(%s, %s)) t1
+                        CROSS JOIN (SELECT proga, radalja from razdalja(vmesnaPostaja(%s, %s), %s)) t2""", [p11, p11, p22, p11, p22, p22])
+        tabela = cur.fetchall()
+        razdalja = tabela[0][1] + tabela[0][3]
+    return razdalja
 
 def vozniredZRazdaljo(p1, p2):
     cur.execute("""SELECT id FROM postaja WHERE ime = %s""", [p1])
@@ -505,5 +512,7 @@ def vozniRedPrestop(p1, p2): # vrne Vstopna, cas odhoda, prestopna, cas prihoda,
 #tabela = poisciVozniRed22("Kranj", "Ljubljana")
 #print(tabela)
 #print(tabulate(tabela))
-# print(tabulate(vozniredZRazdaljo( "Jesenice", "Ljubljana")))
-print(tabulate(vozniRedPrestop("Koper", "Domžale")))
+#print(tabulate(vozniredZRazdaljo( "Jesenice", "Ljubljana")))
+# print(tabulate(vozniRedPrestop("Koper", "Domžale")))
+#print(razdaljaMedPostajama("Kranj","Nova_Gorica"))
+

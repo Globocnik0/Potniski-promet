@@ -21,6 +21,7 @@ tabele = ["model", "vlak", "zaposlen", "pregled", "vozovnica", "potnik", "postaj
 #izbrisiVse(cur, tabele)
 #USTVARJANJE TABEL -----------------------
 
+
 #zbrisiTabelo(cur, "model")
 # zbrisiTabelo(cur, "vlak")
 # zbrisiTabelo(cur, "zaposlen")
@@ -82,7 +83,7 @@ conn.commit()
 # napolniTabeloProgeKraji(cur)
 # print("tabela ProgeKraji napolnjena")
 
-napolniTabeloVozniRed(cur)
+# napolniTabeloVozniRed(cur)
 # print("tabela VozniRed napolnjena")
 
 # napolniTabeloUporabnik(cur, 2000, 20)

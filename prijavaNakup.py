@@ -28,8 +28,9 @@ def registracijaUporabnika(podatki): #podatki so [emso, ime, rojstvo, naslov, ma
     conn.commit()
     return True
 
-def informacijeKart():
-    cur.execute("""SELECT * FROM vozovnica""")
+def informacijeKart(type):
+    cur.execute("""SELECT v.id, v.ime, v.cas_veljavnost, v.cena, v.opis, ((SELECT (SELECT CURRENT_DATE + v.cas_veljavnost * INTERVAL '1 day')::TIMESTAMP::DATE)) velja_do FROM vozovnica v
+                    WHERE id = %s""", [type])
     return cur.fetchall() #vrne id, ime, cena, veljavnost, opis
 
 def nakupKarte(podatki): #[emso, vpostaja, ipostaja, vrsta Karte, cena]
