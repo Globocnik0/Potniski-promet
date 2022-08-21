@@ -39,8 +39,8 @@ def search():
     else:
         username = False
 
-    station_1 = bottle.request.forms['station_1']
-    station_2 = bottle.request.forms['station_2']
+    station_1 = bottle.request.forms.station_1
+    station_2 = bottle.request.forms.station_2 # bottle.request.forms['station_1'] -- ne delajo šumniki
     traffic_data = vozniredZRazdaljo(station_1, station_2)
     print(traffic_data)
     prestop = False
