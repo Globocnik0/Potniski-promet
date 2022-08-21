@@ -1,0 +1,39 @@
+%rebase("base.html")
+
+    <h1 style="color:rgb(59, 182, 110);">
+        My account
+    </h1>
+
+    Name: {{info[0]}}
+    <br>
+    Birth: {{info[1]}}
+    <br>
+    Address: {{info[2]}}
+    <br>
+    Mail: {{info[3]}}
+    <br>
+
+    <h3 style="color:rgb(59, 182, 110);">
+       Change password here
+    </h3>
+    <h3 class="text-center" style="color:rgb(255, 38, 0);">{{!alert}}</h3>
+
+    <form action="/password_change/" method="post">
+
+        <div class="form-group">
+            <label for="old_password1">Old password :</label> <input class="form-control-lg" id="old_password1" name="old_password1" placeholder="Enter old password" required="" type="password">
+        </div>
+        <div class="form-group">
+            <label for="old_password2">Reenter old password :</label> <input class="form-control-lg" id="old_password2" name="old_password2" placeholder="Reenter old password" required="" type="password">
+        </div>
+        <br>
+        
+        <div class="form-group">
+            <label for="new_password">New password :</label> <input class="form-control-lg" id="new_password" name="new_password" placeholder="Enter new password" required="" type="password">
+        </div>
+        <br>
+
+        <div class="align-center">
+            <button class="btn btn-success" type="submit">Change password</button>
+        </div>
+    </form>

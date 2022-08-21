@@ -1,6 +1,3 @@
-# import sys
-# sys.path.append("../../osnove_podatkovnih_baz")
-# from osnove_podatkovnih_baz.iskanjeVoznegaReda import *
 from iskanjeVoznegaReda import *
 from prijavaNakup import *
 import re
@@ -84,7 +81,7 @@ def login():
 def login_post():
     email = bottle.request.forms['email']
     password = bottle.request.forms['password']
-    if prijava(email, password): #dodal sm naslov
+    if prijava(email, password): 
         emso = dobiEmso(email)
         bottle.response.set_cookie('Logged', emso, path = '/')
         bottle.redirect('/')
@@ -153,7 +150,6 @@ def display_tickets():
     emso = bottle.request.get_cookie('Logged')
     if emso:
         tickets = informacijeUporabnikaNakupi(emso)
-        print(tickets)
         username = informacijeUporabnika(emso)[0]
         return bottle.template('display_tickets.html', username = username, tickets= tickets)
     else:
@@ -163,11 +159,31 @@ def display_tickets():
 def display_profile():
     emso = bottle.request.get_cookie('Logged')
     if emso:
-        info = informacijeUporabnika(emso)
-        
+        info = informacijeUporabnika(emso)      
         username = info[0]
-        return bottle.template('profil.html', username = username, info = info)
+        return bottle.template('profile.html', username = username, info = info, alert = '')
     else:
         bottle.redirect('/login/')
+
+@bottle.post('/password_change/')
+def change_password():
+    emso = bottle.request.get_cookie('Logged')
+    if emso:
+        info = informacijeUporabnika(emso) 
+        username = info[0]
+        email = info[3]
+        new_password = bottle.request.forms['new_password']
+        old_password1 = bottle.request.forms['old_password1']
+        old_password2 = bottle.request.forms['old_password2']
+        if old_password1 == old_password2:
+            if prijava(email, old_password1):
+                zamenjajGeslo(emso, new_password)
+                return bottle.template('profile.html', username = username, info = info, alert = 'Change successful')
+            else:
+                return bottle.template('profile.html', username = username, info = info, alert = 'Old passwords is not correct')
+        else:
+            return bottle.template('profile.html', username = username, info = info, alert = 'Old passwords don\'t match')
+    else:
+        bottle.redirect('/')
 
 bottle.run(debug=True, reloader=True, host = "localhost", port = 8081) #dodal port pa localhost ker nevem koko točn to dela
