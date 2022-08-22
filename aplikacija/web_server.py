@@ -2,9 +2,10 @@ from iskanjeVoznegaReda import *
 from prijavaNakup import *
 import re
 import hashlib
-from bottleext import *
+import bottle
 import os
 import shutil
+from bottleext import *
 
 app = bottle.default_app()
 bottle.BaseTemplate.defaults['get_url'] = app.get_url
@@ -24,14 +25,12 @@ def hashGesla(s):
 
 
 @bottle.get('/')
-def redirect():
-    
-    bottle.redirect('/search/')
+def start():
+    bottle.redirect(bottle.url('search_get'))
 
 
 @bottle.get('/search/')
 def search_get():
-    print("OI")
     emso = bottle.request.get_cookie('Logged')
     if emso:
         username = informacijeUporabnika(emso)[0]
@@ -60,7 +59,7 @@ def search():
 @bottle.get('/register/')
 def register():
     if bottle.request.get_cookie('Logged'):
-        bottle.redirect('/')
+        bottle.redirect(bottle.url('start'))
     return bottle.template('register.html', alert='', username = False)
 
 @bottle.post('/register/')
@@ -83,7 +82,7 @@ def register_post():
 @bottle.get('/login/')
 def login():
     if bottle.request.get_cookie('Logged'):
-        bottle.redirect('/')
+        bottle.redirect(bottle.url('start'))
     return bottle.template('login.html', alert='', username = False)
 
 @bottle.post('/login/')
@@ -93,14 +92,14 @@ def login_post():
     if prijava(email, password): 
         emso = dobiEmso(email)
         bottle.response.set_cookie('Logged', emso, path = '/')
-        bottle.redirect('/')
+        bottle.redirect(bottle.url('start'))
     else:
         return bottle.template('login.html', alert='Napačen email ali geslo', username = False)
 
 @bottle.get('/logout/')
 def logout():
     bottle.response.set_cookie('Logged', '', path='/', expires=0)
-    bottle.redirect('/')
+    bottle.redirect(bottle.url('start'))
 
 
 @bottle.get('/ticket_preview/<station_1>/<station_2>/<type>/')
@@ -109,7 +108,7 @@ def preview_ticket(station_1, station_2, type):
     if emso:
         username = informacijeUporabnika(emso)[0]
     else:
-        bottle.redirect('/login/')
+        bottle.redirect(bottle.url('login'))
     if int(type) == 5:
         ticket_type = 'Daily ticket'
         faktor_cene = 1
@@ -152,7 +151,7 @@ def uporabnik(station_1, station_2, type):
 
     price = razdaljaMedPostajama(station_1, station_2) * 0.1 * faktor_cene # 5 centov na kilometer
     nakupKarte([emso, station_1, station_2, type, price])
-    bottle.redirect('/tickets/')
+    bottle.redirect(bottle.url('display_tickets'))
 
 @bottle.get('/tickets/')
 def display_tickets():
@@ -162,7 +161,7 @@ def display_tickets():
         username = informacijeUporabnika(emso)[0]
         return bottle.template('display_tickets.html', username = username, tickets= tickets)
     else:
-        bottle.redirect('/')
+        bottle.redirect(bottle.url('start'))
     
 @bottle.get('/profile/')
 def display_profile():
@@ -172,7 +171,7 @@ def display_profile():
         username = info[0]
         return bottle.template('profile.html', username = username, info = info, alert = '')
     else:
-        bottle.redirect('/login/')
+        bottle.redirect(bottle.url('login'))
 
 @bottle.post('/password_change/')
 def change_password():
@@ -193,6 +192,6 @@ def change_password():
         else:
             return bottle.template('profile.html', username = username, info = info, alert = 'Old passwords don\'t match')
     else:
-        bottle.redirect('/')
+        bottle.redirect(bottle.url('start'))
 
 bottle.run(debug=True, reloader=True, host = "localhost", port = 8081) 
