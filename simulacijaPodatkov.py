@@ -1,7 +1,7 @@
 import random
 from turtle import st
 import exrex as ex
-import auth
+import auth_public as auth
 import numpy as np
 import psycopg2, psycopg2.extensions, psycopg2.extras
 import podatkiZaGeneracijo as pzg
