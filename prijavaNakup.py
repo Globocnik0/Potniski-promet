@@ -1,4 +1,4 @@
-import auth
+import auth_public as auth
 from baze import *
 from simulacijaPodatkov import *
 import psycopg2, psycopg2.extensions, psycopg2.extras
@@ -24,7 +24,7 @@ def registracijaUporabnika(podatki): #podatki so [emso, ime, rojstvo, naslov, ma
         return False
 
     print('registriran')
-    cur.execute("""INSERT INTO uporabnik(emso, ime, rojstvo, naslov, mail, geslo, stevilo_vozenj, stevilo_km) values (%s, %s, %s, %s, %s, %s, 0, 0)""", podatki)
+    cur.execute("""INSERT INTO uporabnik(emso, ime, rojstvo, naslov, mail, geslo) values (%s, %s, %s, %s, %s, %s)""", podatki)
     conn.commit()
     return True
 
