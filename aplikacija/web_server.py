@@ -1,7 +1,7 @@
 from iskanjeVoznegaReda import *
 from prijavaNakup import *
 import re
-
+import hashlib
 import bottle
 import os
 import shutil
@@ -15,12 +15,23 @@ bottle.BaseTemplate.defaults['get_url'] = app.get_url
 #     return bottle.static_file(
 #         filename, root=os.path.join(os.getcwd(), "database"))
 
+def hashGesla(s):
+    """Vrni SHA-512 hash danega UTF-8 niza. Gesla vedno spravimo v bazo
+       kodirana s to funkcijo."""
+    h = hashlib.sha512()
+    h.update(s.encode('utf-8'))
+    return h.hexdigest()
+
+
 @bottle.get('/')
 def redirect():
+    
     bottle.redirect('/search/')
+
 
 @bottle.get('/search/')
 def search_get():
+    print("OI")
     emso = bottle.request.get_cookie('Logged')
     if emso:
         username = informacijeUporabnika(emso)[0]
@@ -39,7 +50,6 @@ def search():
     station_1 = bottle.request.forms.station_1
     station_2 = bottle.request.forms.station_2 # bottle.request.forms['station_1'] -- ne delajo šumniki
     traffic_data = vozniredZRazdaljo(station_1, station_2)
-    print(traffic_data)
     prestop = False
     if traffic_data == []:
         traffic_data = vozniRedPrestop(station_1, station_2)
@@ -60,7 +70,7 @@ def register_post():
     rojstvo = bottle.request.forms['rojstvo']
     naslov = bottle.request.forms['naslov']
     email = bottle.request.forms['email']
-    password = bottle.request.forms['password']
+    password = hashGesla(bottle.request.forms['password'])
     #first_time_user = bottle.request.forms.first_login
     if re.search("^[A-Za-z0-9]*$", username) and re.search("^[A-Za-z0-9]*$",password):
         if registracijaUporabnika([emso, username, rojstvo, naslov, email, password]): #dodal sm naslov
@@ -80,7 +90,7 @@ def login():
 @bottle.post('/login/')
 def login_post():
     email = bottle.request.forms['email']
-    password = bottle.request.forms['password']
+    password = hashGesla(bottle.request.forms['password'])
     if prijava(email, password): 
         emso = dobiEmso(email)
         bottle.response.set_cookie('Logged', emso, path = '/')
@@ -186,4 +196,4 @@ def change_password():
     else:
         bottle.redirect('/')
 
-bottle.run(debug=True, reloader=True, host = "localhost", port = 8081) #dodal port pa localhost ker nevem koko točn to dela
+bottle.run(debug=True, reloader=True, host = "localhost", port = 8081) 

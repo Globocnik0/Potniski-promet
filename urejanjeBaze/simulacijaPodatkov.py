@@ -41,16 +41,11 @@ def napolniTabeloVlak(cur, stVnosov):
 
 #-----POSTAJA------------------------------------------------
 def napolniTabeloPostaja( cur):
-    komanda = """INSERT INTO postaja(ime) values"""
-    for val in pzg.imenaPostaj:
-        niz = "({}),".format(val)
-        komanda += niz
-    cur.execute(komanda[:-1])
-     #znebimo se zadnje vejice    
+    cur.execute("""INSERT INTO postaja(ime) values""".format(",".join(["(%s)" for i in range(len(pzg.imenaPostaj))])), [val for val in pzg.imenaPostaj]) 
 
 #---------------ZAPOSLENI------------------------------------------------
 def napolniTabeloZaposleni( cur,stVnosov):
-    komanda = """INSERT INTO zaposlen(emso, ime, rojstvo, naslov, datum_zaposlitve, naziv) values"""
+    
     emsos = [random.randint(1000000, 9999999) for m in range(stVnosov)]
     imens = [pzg.imena[random.randint(0, len(pzg.imena)-1)] for m in range(stVnosov)]
     primks = [pzg.priimki[random.randint(0, len(pzg.priimki)-1)] for m in range(stVnosov)]
@@ -62,47 +57,9 @@ def napolniTabeloZaposleni( cur,stVnosov):
     list = np.array([emsos, imens, primks, rojstva, naslovi, stevilke, zaposlitve, nazivs])
     vnosZaposleni = transponiraj2(list)
     
-    for val in vnosZaposleni:
-        em = val[0]
-        im = val[1] + " " + val[2]
-        im = im.replace("' '", " ")
-        d = datum(val[3])
-        nas = val[4] + " " + str(val[5])
-        nas = nas.replace("' ", " ") + "'"
-        dz = datum(val[6])
-        niz = "('{}', {}, {}, {}, {}, {}),".format(em, im, d, nas, dz, val[7])
-        komanda += niz
-    cur.execute(komanda[:-1])
-           
+    cur.execute("""INSERT INTO zaposlen(emso, ime, rojstvo, naslov, datum_zaposlitve, naziv) values""".format(",".join(["(%s,%s,%s,%s,%s,%s)" 
+                    for i in range(len(vnosZaposleni))])), [val[i] for val in vnosZaposleni for i in (0, 1,2,3,4,5)])
 
-#-----------PREGLED------------------
-def napolniTabeloPregled(cur, stVnosov):
-    komanda = """INSERT INTO pregled(vlak, zaposleni, datum_pregleda, komentar) values"""
-    
-    cur.execute(""" SELECT id from vlak""")
-    vlakiNaVoljo = cur.fetchall()
-    vlaki = [vlakiNaVoljo[random.randint(0, len(vlakiNaVoljo)-1)][0] for m in range(stVnosov)]
-
-    cur.execute("""SELECT emso from zaposlen""")
-    zaposleniNaVoljo = cur.fetchall()
-    zaposleni = [zaposleniNaVoljo[random.randint(0, len(zaposleniNaVoljo)-1)][0] for m in range(stVnosov)]
-
-    datums = [(random.randint(1, 28), random.randint(1, 12), random.randint(1990, 2022)) for m in range(stVnosov)]
-
-    koments = [pzg.komentarji[m%(len(pzg.komentarji)-1)] for m in range(stVnosov)]
-
-    list = np.array([vlaki, zaposleni, datums, koments])
-    vnosPregledi= transponiraj2(list)
-
-    for val in vnosPregledi:
-        vl = val[0]
-        zap = val[1]
-        dat = datum(val[2])
-        kom = val[3]
-        niz = "({}, {}, {}, {}),".format(vl, zap, dat, kom)
-        komanda += niz
-    cur.execute(komanda[:-1])
-           
 
 #-----------VOZOVNICA-----------------  
 def napolniTabeloVozovnica(cur):
@@ -111,18 +68,10 @@ def napolniTabeloVozovnica(cur):
     list = np.array([pzg.vozovnicaId ,pzg.vozovnicaIme, pzg.vozovnicaVelja, pzg.vozovnicaCena, pzg.vozovnicaOpis])
     vnosVozovnice= transponiraj2(list)
 
-    for val in vnosVozovnice:
-        id = val[0]
-        im = val[1]
-        cen = val[2]
-        vel = val[3]
-        op = val[4]
-        niz = "({}, {}, {}, {}, {}),".format(id, im, cen, vel, op)
-        komanda += niz
-    cur.execute(komanda[:-1])
-    
+    cur.execute("""INSERT INTO vozovnica(id, ime, cas_veljavnost, cena, opis) values""".format(",".join(["(%s,%s,%s,%s,%s)" 
+                    for i in range(len(vnosVozovnice))])), [val[i] for val in vnosVozovnice for i in (0, 1,2,3,4,5)])
 
-#---------POTNIKI------------------
+#---------POTNIKI------------------#Ne potrebujem
 def napolniTabeloPotnik(cur, stVnosov):
     komanda = """INSERT INTO potnik(emso, ime, rojstvo, naslov, mail, geslo, vozovnica, datum_veljavnosti) values"""
     cur.execute(""" SELECT id from vozovnica""")
@@ -140,7 +89,9 @@ def napolniTabeloPotnik(cur, stVnosov):
     datumis = [(random.randint(1, 28), random.randint(1, 12), random.randint(2021, 2022)) for m in range(stVnosov)]
     llist = np.array([emsos, imens, primks, rojstvs, naslovs, stevilks, vozovnicas, datumis])
     vnosPotniki = transponiraj2(llist)
-    
+
+    cur.execute("""INSERT INTO potnik(emso, ime, rojstvo, naslov, mail, geslo, vozovnica, datum_veljavnosti) values""".format(",".join(["(%s,%s,%s,%s,%s,%s, %s, %s)" 
+                for i in range(len(vnosPotniki))])), [val[i] for val in vnosPotniki for i in (0, 1,2,3,4,5, 5, 6, 7)])
     for i, val in enumerate(vnosPotniki):
         em = val[0]
         ime = val[1].replace("'", "")
@@ -157,7 +108,7 @@ def napolniTabeloPotnik(cur, stVnosov):
         komanda += niz
     cur.execute(komanda[:-1])
     
-#----UPORABNIK-------
+#----UPORABNIK-------#NE POTREBUJEM
 
 def napolniTabeloUporabnik(cur, stVnosovPotnik, stVnosovZaposleni):
     komanda = """INSERT INTO uporabnik(emso, ime, rojstvo, naslov, naziv, vozovnica, datum_veljavnosti, mail, geslo) values"""
@@ -232,8 +183,6 @@ def napolniTabeloUporabnik(cur, stVnosovPotnik, stVnosovZaposleni):
 
 #------PROGA------------------
 def napolniTabeloProga(cur):
-    komanda = """INSERT INTO proga(id, seznam_postaj, razdalje) values"""
-    
     pro = []
     razdalje = []
     for i, pr in enumerate(pzg.proge):
@@ -260,30 +209,26 @@ def napolniTabeloProga(cur):
         razs.append(razStr)
     llist = np.array([ids, progs, razs])
     vnosProge = transponiraj2(llist)
-    for val in vnosProge:
-        id = val[0]
-        sezP = val[1]
-        sezRaz = val[2]
-        niz = "({0}, '{1}', '{2}'),".format(id, sezP, sezRaz)
-        komanda += niz
-    cur.execute(komanda[:-1])
     
+    cur.execute("""INSERT INTO proga(id, seznam_postaj, razdalje) values""".format(",".join(["(%s,%s,%s)" 
+                for i in range(len(vnosProge))])), [val[i] for val in vnosProge for i in range(3)])
 
 #----PROGA2------------------
 def napolniTabeloProgeKraji(cur):
-    cur.execute("""SELECT * FROM proga""")
-    prIds, prStr, prRaz = np.transpose(np.array(cur.fetchall()))
+    proge = pzg.proge + [pr[::-1] for pr in pzg.proge]
+    
+    razdalje = pzg.razdalje + [raz[::-1] for raz in  pzg.razdalje]
     komanda = """INSERT INTO progeKraji(proga, postaja, zaporedna_st, razdalja) values"""
-    for i in range(len(prIds)):
-        prId = int(prIds[i])
-        proga = prStr[i].split(",")
-        razdalja = prRaz[i].split(",")
+    for i in range(len(proge)):
+        proga = proge[i]
+        razdalja = razdalje[i]
         for j, p in enumerate(proga):
+            p = p.replace("'", "")
             cur.execute(""" SELECT id FROM postaja
-                            WHERE ime = '{}' """.format(p))
+                            WHERE ime = %s """,[p])
             posIds = cur.fetchall()
             posId = posIds[0][0]
-            niz = "({}, {}, {}, {}),".format(prId, posId, j, int(razdalja[j]))
+            niz = "({}, {}, {}, {}),".format(i, posId, j, int(razdalja[j]) if j < len(razdalja) else 0)
             komanda += niz
     cur.execute(komanda[:-1])
     
@@ -313,7 +258,7 @@ def napolniTabeloVozniRed(cur):
     vla = vlakIds[0][0]
     for id in progaIds:
         cur.execute(""" SELECT postaja from progekraji
-                        WHERE proga = {}""".format(id))
+                        WHERE proga = %s"""[id])
         postaje = list(np.transpose(np.array(cur.fetchall()))[0])
         casiMedPostajami = [random.randint(5,15) for i in range(len(postaje)-1)]
         casiMedPostajami = [0] + casiMedPostajami
@@ -352,21 +297,9 @@ def napolniTabeloVozniRed(cur):
 
     llist = np.array([postajes, casis1, casis2, vozniks, vlaks, progas, voznjas])
     vnosVozniRed = transponiraj2(llist)
-    
-    komanda = """INSERT INTO voznired(postaja, cas_prihoda, cas_odhoda, voznik, vlak, proga, voznja) values"""
-    for val in vnosVozniRed:
-        idp = val[0]
-        cp = val[1]
-        co = val[2]
-        vo = val[3]
-        vl = val[4]
-        pr = val[5]
-        vz = val[6]
-        niz = "({}, '{}', '{}', {}, '{}', {}, {}),".format(idp, cp, co, vo, vl, pr, vz)
-        komanda += niz
-    cur.execute(komanda[:-1])
-    
 
+    cur.execute("""INSERT INTO voznired(postaja, cas_prihoda, cas_odhoda, voznik, vlak, proga, voznja) values""".format(",".join(["(%s,%s,%s,%s,%s,%s,%s)" 
+            for i in range(len(vnosVozniRed))])), [val[i] for val in vnosVozniRed for i in range(7)])
     
 def izbrisiCeloTabelo(cur, tabela):
     komanda = """ DELETE FROM {}

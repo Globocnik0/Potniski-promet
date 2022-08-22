@@ -16,10 +16,8 @@ def dovoljenja():
                     GRANT SELECT ON ALL TABLES IN SCHEMA public TO javnost;
                     GRANT SELECT, UPDATE ON SEQUENCE kupljenekarte_id_seq TO javnost;
                     GRANT SELECT, INSERT, UPDATE ON uporabnik TO javnost;
-                    GRANT SELECT, INSERT, UPDATE ON kupljenekarte TO javnost;
-    
-    
-    """)
+                    GRANT SELECT, INSERT, UPDATE ON kupljenekarte TO javnost; 
+                    """)
     conn.commit()
 
 def ustvariTabeloModel():
@@ -159,7 +157,7 @@ def ustvariTabeloVozniRed():
         cas_odhoda TIME NOT NULL,
         voznik TEXT REFERENCES zaposlen(emso),
         vlak INTEGER REFERENCES vlak(id),
-        proga INTEGER REFERENCES proga(id),
+        proga INTEGER,
         voznja INTEGER NOT NULL,
         PRIMARY KEY(proga, voznja, postaja)
         )
@@ -171,7 +169,7 @@ def ustvariTabeloProgeKraji():
 
     komanda = """ CREATE TABLE progeKraji(
                 proga INTEGER,
-                postaja INTEGER,
+                postaja INTEGER  REFERENCES postaja(id),
                 zaporedna_st INTEGER,
                 razdalja INT,
                 PRIMARY KEY(proga, postaja)
@@ -202,7 +200,6 @@ def zbrisiTabelo(cur, ImeTabele):
     """.format(ImeTabele)
     komanda += " CASCADE"
     cur.execute(komanda)
-
 def izbrisiVse(cur, tabele):
     for tabela in tabele:
         zbrisiTabelo(cur, tabela)
