@@ -10,6 +10,18 @@ import csv
 conn = psycopg2.connect(dbname = auth.db, host = auth.host, user = auth.user, password = auth.password)
 cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
+def dovoljenja():
+    cur.execute("""REVOKE ALL ON DATABASE sem2022_zigac FROM javnost;
+                    GRANT CONNECT ON DATABASE sem2022_zigac TO javnost;
+                    GRANT SELECT ON ALL TABLES IN SCHEMA public TO javnost;
+                    GRANT SELECT, UPDATE ON SEQUENCE kupljenekarte_id_seq TO javnost;
+                    GRANT SELECT, INSERT, UPDATE ON uporabnik TO javnost;
+                    GRANT SELECT, INSERT, UPDATE ON kupljenekarte TO javnost;
+    
+    
+    """)
+    conn.commit()
+
 def ustvariTabeloModel():
     komanda = """
         CREATE TABLE model(
