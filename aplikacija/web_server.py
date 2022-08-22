@@ -65,14 +65,13 @@ def register():
 
 @bottle.post('/register/')
 def register_post():
-    emso = bottle.request.forms['emso']
-    username = bottle.request.forms['ime']
-    rojstvo = bottle.request.forms['rojstvo']
-    naslov = bottle.request.forms['naslov']
-    email = bottle.request.forms['email']
-    password = hashGesla(bottle.request.forms['password'])
-    #first_time_user = bottle.request.forms.first_login
-    if re.search("^[A-Za-z0-9]*$", username) and re.search("^[A-Za-z0-9]*$",password):
+    emso = bottle.request.forms.emso
+    username = bottle.request.forms.ime
+    rojstvo = bottle.request.forms.rojstvo
+    naslov = bottle.request.forms.naslov
+    email = bottle.request.forms.email
+    password = hashGesla(bottle.request.forms.password)
+    if re.search("^[A-Za-z0-9]*$", username) and re.search("^[A-Za-z0-9]*$", password):
         if registracijaUporabnika([emso, username, rojstvo, naslov, email, password]): #dodal sm naslov
             return bottle.template('login.html', alert='Now you can also log in', username = False) #a je čudno da na strani register dam template login?
         else:
@@ -89,8 +88,8 @@ def login():
 
 @bottle.post('/login/')
 def login_post():
-    email = bottle.request.forms['email']
-    password = hashGesla(bottle.request.forms['password'])
+    email = bottle.request.forms.email
+    password = hashGesla(bottle.request.forms.password)
     if prijava(email, password): 
         emso = dobiEmso(email)
         bottle.response.set_cookie('Logged', emso, path = '/')
@@ -182,12 +181,12 @@ def change_password():
         info = informacijeUporabnika(emso) 
         username = info[0]
         email = info[3]
-        new_password = bottle.request.forms['new_password']
-        old_password1 = bottle.request.forms['old_password1']
-        old_password2 = bottle.request.forms['old_password2']
+        new_password = bottle.request.forms.new_password
+        old_password1 = bottle.request.forms.old_password1
+        old_password2 = bottle.request.forms.old_password2
         if old_password1 == old_password2:
-            if prijava(email, old_password1):
-                zamenjajGeslo(emso, new_password)
+            if prijava(email, hashGesla(old_password1)):
+                zamenjajGeslo(emso, hashGesla(new_password))
                 return bottle.template('profile.html', username = username, info = info, alert = 'Change successful')
             else:
                 return bottle.template('profile.html', username = username, info = info, alert = 'Old passwords is not correct')
