@@ -2,7 +2,7 @@ from iskanjeVoznegaReda import *
 from prijavaNakup import *
 import re
 import hashlib
-import bottle
+from bottleext import *
 import os
 import shutil
 
