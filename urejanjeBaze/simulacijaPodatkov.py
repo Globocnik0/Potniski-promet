@@ -1,12 +1,12 @@
 import random
 from turtle import st
 import exrex as ex
-import auth_public as auth
+import auth as auth
 import numpy as np
 import psycopg2, psycopg2.extensions, psycopg2.extras
 import podatkiZaGeneracijo as pzg
 from faker import Faker
-import cas
+import cas as cas
 
 fake = Faker()
 def transponiraj(a1, a2):
@@ -26,11 +26,7 @@ def napolniTabeloModel(cur):
     tezaList = [10, 12, 20, 20, 23]
     imeList = ["taHitr", "taPocasn", "taVelik", "zaKolo", "zaPivoInCvetje"]
     vnosModel = transponiraj2([capList, tezaList, imeList])
-    komanda = """INSERT INTO model(kapaciteta, teza, ime) values"""
-    for val in vnosModel:
-        niz = "({}, {}, '{}'),".format(val[0], val[1], val[2])
-        komanda += niz
-    cur.execute(komanda[:-1])
+    cur.execute("""INSERT INTO model(kapaciteta, teza, ime) VALUES {}""".format(",".join(["(%s, %s, %s)" for i in range(len(vnosModel))])), [val[i] for val in vnosModel for i in (0, 1, 2)])
     
 
 #----VLAK----------------
@@ -41,12 +37,7 @@ def napolniTabeloVlak(cur, stVnosov):
     modeli = [modeliNaVoljo[random.randint(0, len(modeliNaVoljo)-1)][0] for m in range(stVnosov)]
     vnosVlak = transponiraj(letaIzdelava, modeli)
 
-    komanda = """INSERT INTO vlak(leto_izdelave, model) values"""
-    for val in vnosVlak:
-        niz = "({}, {}),".format(val[0], val[1])
-        komanda += niz
-    cur.execute(komanda[:-1])
-    
+    cur.execute("""INSERT INTO vlak(leto_izdelave, model) values""".format(",".join(["(%s, %s)" for i in range(len(vnosVlak))])), [val[i] for val in vnosVlak for i in (0, 1)])
 
 #-----POSTAJA------------------------------------------------
 def napolniTabeloPostaja( cur):

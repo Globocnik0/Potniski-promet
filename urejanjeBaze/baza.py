@@ -1,4 +1,4 @@
-import auth_public as auth
+import auth as auth
 from baze import *
 from simulacijaPodatkov import *
 import psycopg2, psycopg2.extensions, psycopg2.extras
@@ -22,8 +22,9 @@ tabele = ["model", "vlak", "zaposlen", "pregled", "vozovnica", "potnik", "postaj
 #USTVARJANJE TABEL -----------------------
 
 
-#zbrisiTabelo(cur, "model")
-# zbrisiTabelo(cur, "vlak")
+# zbrisiTabelo(cur, "model")
+zbrisiTabelo(cur, "vlak")
+conn.commit()
 # zbrisiTabelo(cur, "zaposlen")
 # zbrisiTabelo(cur, "pregled")
 # zbrisiTabelo(cur, "vozovnica")
@@ -36,9 +37,9 @@ tabele = ["model", "vlak", "zaposlen", "pregled", "vozovnica", "potnik", "postaj
 # zbrisiTabelo(cur, "uporabnik")
 # zbrisiTabelo(cur, "kupljeneKarte")
 
-conn.commit()
+#conn.commit()
 
-#ustvariTabeloModel()
+# ustvariTabeloModel()
 # ustvariTabeloVlak()
 # ustvariTabeloZaposlen()
 # ustvariTabeloPregled()
@@ -51,7 +52,7 @@ conn.commit()
 # ustvariTabeloVozniRed()
 # ustvariTabeloUporabnik()
 # ustvariTabeloKupljeneKarte()
-conn.commit()
+# conn.commit()
 
 #----POLNJENJE TABEL----------------
 # izbrisiCeloTabelo(cur, "uporabnik")
@@ -87,4 +88,3 @@ conn.commit()
 # print("tabela VozniRed napolnjena")
 
 # napolniTabeloUporabnik(cur, 2000, 20)
-conn.commit()

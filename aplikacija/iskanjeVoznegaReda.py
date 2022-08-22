@@ -1,6 +1,4 @@
 import auth_public as auth
-from baze import *
-from simulacijaPodatkov import *
 import psycopg2, psycopg2.extensions, psycopg2.extras
 from tabulate import tabulate
 
