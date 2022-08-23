@@ -1,28 +1,38 @@
 %rebase("base.html")
 
-	<h1 class="text-center">For easier surfing and for further acces you may log in.</h1>
-	<h3 class="text-center" style="color:rgb(255, 38, 0);">{{!alert}}</h3>
-	<center>
-		<div class="back">
-			<div class="div-center">
-				<div class="content">
-					<form action="/login/" method="post">
 
-						<div class="form-group">
-							<label for="email">Email :</label> <input class="form-control-lg" id="email" name="email" placeholder="Vpiši elektronski naslov" type="email">
-						</div>
-						<br>
-						
-						<div class="form-group">
-							<label for="password">Password :</label> <input class="form-control-lg" id="password" name="password" placeholder="Enter Password" required="" type="password">
-						</div>
-						
-						<br>
-						<div class="align-center">
-							<button class="btn btn-success" type="submit">Log in</button>
-						</div>
-					</form>
-				</div>
+<section class="vh-80">
+	<div class="container py-5 h-100">
+		<div class="row d-flex justify-content-center align-items-center h-100">
+		<div class="col-12 col-md-8 col-lg-6 col-xl-5">
+			<div class="card shadow-2-strong" style="border-radius: 1rem;">
+			<div class="card-body p-5 text-center">
+	
+				<h3 class="mb-5">You may login</h3>
+				<h4 class="text-center" style="color:rgb(255, 38, 0);">{{!alert}}</h4>
+	
+
+				<form action="/login/" method="post">
+					<div class="form-outline mb-4">
+						<input class="form-control form-control-lg" id="email" name="email" placeholder="Enter email" type="email">
+						<label class="form-label" for="typeEmailX-2">Email</label>
+					</div>
+
+					
+					<div class="form-outline mb-4">
+						<input class="form-control form-control-lg" id="password" name="password" placeholder="Enter Password" required="" type="password">
+						<label class="form-label" for="typePasswordX-2">Password</label>
+					</div>
+					
+
+					<div class="align-center">
+						<button class="btn btn-primary btn-lg btn-block" type="submit">Login</button>
+					</div>
+				</form>
+	
+			</div>
 			</div>
 		</div>
-	</center>
+		</div>
+	</div>
+</section>
