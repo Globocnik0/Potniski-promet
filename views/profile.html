@@ -1,39 +1,54 @@
 %rebase("base.html")
 
-    <h1 style="color:rgb(59, 182, 110);">
-        My account
-    </h1>
+<div class="left">
 
-    Name: {{info[0]}}
+    <h1 style="color:rgb(59, 182, 110);">My profile</h1>
+        <font size="6">Name: {{info[0]}}</font>
     <br>
-    Birth: {{info[1]}}
+        <font size="6">Birthdate: {{info[1]}}</font>
     <br>
-    Address: {{info[2]}}
+        <font size="6">Address: {{info[2]}}</font>
     <br>
-    Mail: {{info[3]}}
+        <font size="6">Mail: {{info[3]}}</font>
     <br>
 
-    <h3 style="color:rgb(59, 182, 110);">
-       Change password here
-    </h3>
-    <h3 class="text-center" style="color:rgb(255, 38, 0);">{{!alert}}</h3>
+</div>
 
-    <form action="/password_change/" method="post">
+<div class="right"> 
 
-        <div class="form-group">
-            <label for="old_password1">Old password :</label> <input class="form-control-lg" id="old_password1" name="old_password1" placeholder="Enter old password" required="" type="password">
-        </div>
-        <div class="form-group">
-            <label for="old_password2">Reenter old password :</label> <input class="form-control-lg" id="old_password2" name="old_password2" placeholder="Reenter old password" required="" type="password">
-        </div>
-        <br>
+    <section class="vh-80">
+        <div class="container py-5 h-100">
+            <div class="d-flex justify-content-center align-items-center h-100">
+                <div class="card shadow-2-strong" style="border-radius: 1rem;">
+                <div class="card-body p-5 text-center">
         
-        <div class="form-group">
-            <label for="new_password">New password :</label> <input class="form-control-lg" id="new_password" name="new_password" placeholder="Enter new password" required="" type="password">
-        </div>
-        <br>
+                    <h3 style="color:rgb(59, 182, 110);">Change password here</h3>
+                    <h3 class="text-center" style="color:rgb(255, 38, 0);">{{!alert}}</h3>
+        
+    
+                    <form action="/password_change/" method="post">
 
-        <div class="align-center">
-            <button class="btn btn-success" type="submit">Change password</button>
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="old_password1">Old password :</label> <input class="form-control form-control-lg" id="old_password1" name="old_password1" placeholder="Enter old password" required="" type="password">
+                        </div>
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="old_password2">Reenter old password :</label> <input class="form-control form-control-lg" id="old_password2" name="old_password2" placeholder="Reenter old password" required="" type="password">
+                        </div>
+                        <br>
+                        
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="new_password">New password :</label> <input class="form-control form-control-lg" id="new_password" name="new_password" placeholder="Enter new password" required="" type="password">
+                        </div>
+                        <br>
+                   
+                        <div class="align-center">
+                            <button class="btn btn-success" type="submit">Change password</button>
+                       </div>
+                    </form>
+
+                </div>
+            </div>
+            </div>
         </div>
-    </form>
+    </section>
+
