@@ -1,0 +1,52 @@
+%rebase("base.html")
+
+        <h1 style="color:rgb(59, 182, 110);">
+            Here you can see your new as well as old purchases.
+        </h1>
+
+        <font size="6">
+        <table>
+            % for i, ticket in enumerate(tickets):
+                % if ticket[6] == 1:
+                % validity = 'checked'
+                % else:
+                % validity = 'unchecked'
+                % end
+            <tr> 
+                <td>{{ticket[0]}} </td>      
+                
+            </tr>
+            <tr>
+                <td>Purchase time: {{ticket[1]}}</td>
+            </tr>
+            <tr>
+                <td>Valid until: {{ticket[2]}}</td>
+            </tr>
+            <tr>
+                <td>Start: {{ticket[3]}} </td>
+            </tr>
+            <tr>
+                <td>Stop: {{ticket[4]}} </td>
+            </tr>
+            <tr>
+                
+            </tr>
+            <tr>
+                <td>Ticket price: {{ticket[5]}}€</td>
+            </tr>
+            <tr>
+                <td>Validity: 
+
+                        <input type="checkbox" {{validity}} disabled>
+
+                </td>
+            </tr>
+            <tr>
+                <td bgcolor="#FFFFFF" style="line-height:40px;" colspan=3>&nbsp;</td>
+            </tr>
+            % end
+        </table>
+        </font>
+
+
+
