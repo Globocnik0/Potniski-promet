@@ -4,6 +4,7 @@
             Here you can see your new as well as old purchases.
         </h1>
 
+        <font size="6">
         <table>
             % for i, ticket in enumerate(tickets):
                 % if ticket[6] == 1:
@@ -34,13 +35,18 @@
                 <td>Ticket price: {{ticket[5]}}€</td>
             </tr>
             <tr>
-                <td>Validity: <input type="checkbox" {{validity}} disabled></td>
+                <td>Validity: 
+
+                        <input type="checkbox" {{validity}} disabled>
+
+                </td>
             </tr>
             <tr>
-                <td bgcolor="#FFFFFF" style="line-height:10px;" colspan=3>&nbsp;</td>
+                <td bgcolor="#FFFFFF" style="line-height:40px;" colspan=3>&nbsp;</td>
             </tr>
             % end
         </table>
+        </font>
 
 
 

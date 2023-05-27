@@ -7,7 +7,7 @@
             Greetings fellow passenger! Choose a destination of your next travel.
             % end
         </h1>
-
+<br>
         <center>
             <div class="back">
                 <div class="div-center">
@@ -16,7 +16,9 @@
                             <!-- <div class="form-group">
                                 <label for="station_1">Station 1 :</label> <input class="form-control-lg" id="station_1" name="station_1" placeholder="Enter station_1" required="" type="text">
                             </div> -->
-                              
+                            <font size="4">
+                            
+
                             <label for="station_1">Starting station:</label>
                                 <select name="station_1" id="station_1">
                                     <option value="Ljubljana">Ljubljana</option>
@@ -39,7 +41,8 @@
                                     <option value="Vrhnika">Vrhnika</option>
                                     <option value="Kočevje">Kočevje</option>
                               </select>
-
+<br>
+<br>
                             <label for="station_2">Ending station:</label>
                               <select name="station_2" id="station_2">
                                   <option value="Ljubljana">Ljubljana</option>
@@ -62,8 +65,9 @@
                                   <option value="Vrhnika">Vrhnika</option>
                                   <option value="Kočevje">Kočevje</option>
                             </select>
+                            <br>
+                            <br>
                             
-
                             <!-- <div class="form-group">
                                 <label for="station_2">Station 2 :</label> <input class="form-control-lg" id="station_2" name="station_2" placeholder="Enter station_2" required="" type="text">
                             </div> -->
@@ -71,11 +75,28 @@
                             <div class="align-center">
                                 <button class="btn btn-success" type="submit">Search</button>
                             </div>
+
+                            </font>
+                            <br>
                         </form>
                     </div>
                 </div>
             </div>
         </center>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
         % if username:
-            <h4>You can check your tickets </td> <td><a href='/tickets/' >here</a></td>. </h4>
+        <font size="5">
+            <p class="text-center">
+            <button class="btn btn-outline-success" onclick="location.href='/tickets/'">Check your tickets here</button>
+            </p>
+        </font>

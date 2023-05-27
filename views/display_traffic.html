@@ -5,24 +5,27 @@
     </h1>
         % if not traffic_data == []:
     
-    <style type="text/css">
-        td {
-        padding: 0 15px 0 0;
-        }
-    </style>
-    <table>
+    <table class="table table-bordered table-hover">
             %if not prestop:
                 % station_1 = traffic_data[0][0]
                 
                 % station_2 = traffic_data[1][0]
                 % for i, (ime, cas, razdalja) in enumerate(traffic_data):
-                <tr> 
+         
                     % if i%2 == 0:
-                    <td>Start: {{ime}} </td> <td>Time: {{cas}}</td> <td rowspan="2"> <a href='/ticket_preview/{{station_1}}/{{station_2}}/5/'>Preview Ticket</a> </td> <td rowspan="2">Distance: {{razdalja}} km </td>
-                    % else:
-                    <td>Stop: {{ime}} </td> <td>Time: {{cas}}</td>
                     <tr>
-                    <td bgcolor="#FFFFFF" style="line-height:10px;" colspan=3>&nbsp;</td>
+                        <td>Start: {{ime}} </td> 
+                        <td>Time: {{cas}}</td> 
+                        <td rowspan="2"> 
+                            <button class="btn btn-outline-success" onclick="location.href='/ticket_preview/{{station_1}}/{{station_2}}/5/'">Preview Ticket</button>
+                        </td> 
+                        <td rowspan="2">Distance: {{razdalja}} km </td>
+                    </tr>
+                    % else:
+                    <tr><td>Stop: {{ime}} </td> <td>Time: {{cas}}</td></tr>
+                    
+                    <tr>
+                    <td bgcolor="#FFFFFF" style="line-height:10px;" colspan=4>&nbsp;</td>
                     </tr>
                     % end
                 </tr>
@@ -41,10 +44,13 @@
                     % razdalja1 = route[4]
                     % razdalja2 = route[8]
                 <tr>
-                    <td>Start: {{station_1}} </td> <td>Time: {{cas1}}</td> <td rowspan="4"> <a href='/ticket_preview/{{station_1}}/{{station_2}}/5/' >Preview Ticket</a> </td> <td rowspan="4">Distance: {{razdalja1 + razdalja2}} km </td>
+                    <td>Start: {{station_1}}</td>
+                     <td>Time: {{cas1}}</td> 
+                     <td rowspan="4"> <button class="btn btn-outline-success" onclick="location.href='/ticket_preview/{{station_1}}/{{station_2}}/5/'">Preview Ticket</button></td> 
+                     <td rowspan="4">Distance: {{razdalja1 + razdalja2}} km </td>
                 </tr>
                 <tr>
-                    <td>Stop: {{station_transfer}} </td> <td>Time: {{cas_transfer1}}</td>
+                    <td>Pause: {{station_transfer}} </td> <td>Time: {{cas_transfer1}}</td>
                 </tr>
 
                 <tr>
@@ -55,18 +61,21 @@
                     <td>Stop: {{station_2}} </td> <td>Time: {{cas2}}</td>
                 </tr>
                 
-                <tr>
-                    <td bgcolor="#FFFFFF" style="line-height:10px;" colspan=3>&nbsp;</td>
+                <tr hover="background-color:red;">
+                    <td bgcolor="#FFFFFF" style="line-height:10px;" colspan=4>&nbsp;</td>
                 </tr>
                 
                 %end
             %end
-    </table>
+                <tr>
+                    <td><button class="btn btn-outline-success" onclick="location.href='/ticket_preview/{{station_1}}/{{station_2}}/4/'">Preview student mothly ticket for this relation</button></td>
+                    <td><button class="btn btn-outline-success" onclick="location.href='/ticket_preview/{{station_1}}/{{station_2}}/3/'">Preview mothly ticket for this relation</button></td>
+                    <td><button class="btn btn-outline-success" onclick="location.href='/ticket_preview/{{station_1}}/{{station_2}}/2/'">Preview pensioner monthly ticket for this relation</button></td>
+                    <td><button class="btn btn-outline-success" onclick="location.href='/ticket_preview/{{station_1}}/{{station_2}}/1/'">Preview yearly ticket for this relation</button></td>
+                </tr>
 
-    <a href='/ticket_preview/{{station_1}}/{{station_2}}/4/' >Preview student mothly ticket for this relation</a>
-    <a href='/ticket_preview/{{station_1}}/{{station_2}}/3/' >Preview mothly ticket for this relation</a>
-    <a href='/ticket_preview/{{station_1}}/{{station_2}}/2/' >Preview pensioner monthly ticket for this relation</a>
-    <a href='/ticket_preview/{{station_1}}/{{station_2}}/1/' >Preview yearly ticket for this relation</a> 
+
+    </table>
 
     %else:
         %print("else")

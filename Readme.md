@@ -1,4 +1,4 @@
-## Projekt za predmet osnove podatkovnih    baz
-test
+## Projekt za predmet osnove podatkovnih baz
 
-git config core.sshCommand "ssh -i  /u/kljuc/id_ed25519"
+
+#Poženi aplikacija/web_server.py v direktoriju ..\aplikacija. Pojdi na spletno mesto http://localhost:8081/
